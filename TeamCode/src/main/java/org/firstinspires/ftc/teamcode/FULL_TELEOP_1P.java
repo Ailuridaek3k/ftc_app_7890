@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.util.Range;
 author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
  */
-@TeleOp(name="FULL TELEOP", group="Tele Op")
-public class FULL_TELEOP extends OpMode {
+@TeleOp(name="FULL TELEOP 1P", group="Tele Op")
+public class FULL_TELEOP_1P extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     /*
