@@ -8,11 +8,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/*
+
 7890 Space Lions 2019 "FULL TELEOP"
 author: 7890 Software
-GOALS: (GOALS)
- */
 @TeleOp(name="FULL TELEOP", group="Tele Op")
 public class FULL_TELEOP extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
