@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -22,9 +21,8 @@ import java.util.ArrayList;
 
 
 
-public class GyroTurnCWByPID implements StateMachine.State {
+public class gyroTurnByPID implements StateMachine.State {
 
-    //HAS TO INPUT A NEGATIVE NO.
 
     boolean running = true;
     boolean clockwise;
@@ -57,10 +55,10 @@ public class GyroTurnCWByPID implements StateMachine.State {
 
     private State NextState;
 
-    public GyroTurnCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
+    public gyroTurnByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
 
         driveSpeed = speed;
-        target =  Math.abs(angleTarget)*-1;
+        target = angleTarget;
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
@@ -143,9 +141,9 @@ public class GyroTurnCWByPID implements StateMachine.State {
         }else if(clockwise == true){
             return globalAngle*-1;
         }
-        else //if(!clockwise ==)
-            return globalAngle;
-    }
+            else //if(!clockwise ==)
+              return globalAngle;
+        }
 
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
@@ -234,9 +232,9 @@ public class GyroTurnCWByPID implements StateMachine.State {
 //
 //                wait(100);
 //            }// left turn.
-        do
-        {
-            power = pidRotate.performPID(getAngle()); // power will be + on left turn.
+            do
+            {
+                power = pidRotate.performPID(getAngle()); // power will be + on left turn.
 //                if(!clockwise) {
 //                    leftFront.setPower(-power);
 //                    leftBack.setPower(-power);
@@ -244,19 +242,19 @@ public class GyroTurnCWByPID implements StateMachine.State {
 //                    rightBack.setPower(power);
 //                }else {
 
-            if(target < 0) {
-                leftFront.setPower(power);
-                leftBack.setPower(power);
-                rightFront.setPower(-power);
-                rightBack.setPower(-power);
-            }
-            else {
-                leftFront.setPower(-power);
-                leftBack.setPower(-power);
-                rightFront.setPower(power);
-                rightBack.setPower(power);
-            }
-        } while (!pidRotate.onTarget());
+                if(target < 0) {
+                    leftFront.setPower(power);
+                    leftBack.setPower(power);
+                    rightFront.setPower(-power);
+                    rightBack.setPower(-power);
+                }
+                else {
+                    leftFront.setPower(-power);
+                    leftBack.setPower(-power);
+                    rightFront.setPower(power);
+                    rightBack.setPower(power);
+                }
+            } while (!pidRotate.onTarget());
 
         // turn the motors off.
         leftFront.setPower(0);
@@ -266,7 +264,7 @@ public class GyroTurnCWByPID implements StateMachine.State {
 
 
         // wait for rotation to stop.
-        //   wait(500);
+     //   wait(500);
 
         // reset angle tracking on new heading.
         resetAngle();

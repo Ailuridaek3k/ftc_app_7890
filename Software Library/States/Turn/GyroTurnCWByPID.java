@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -22,9 +21,10 @@ import java.util.ArrayList;
 
 
 
-public class GyroTurnCCWByPID implements StateMachine.State {
+public class GyroTurnCWByPID implements StateMachine.State {
 
-//HAVE TO INPUT A POSITIVE NUMBER
+    //HAS TO INPUT A NEGATIVE NO.
+
     boolean running = true;
     boolean clockwise;
     double angle;
@@ -56,11 +56,10 @@ public class GyroTurnCCWByPID implements StateMachine.State {
 
     private State NextState;
 
-    public GyroTurnCCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
+    public GyroTurnCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
 
         driveSpeed = speed;
-        target = Math.abs(angleTarget);
-
+        target =  Math.abs(angleTarget)*-1;
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
@@ -245,16 +244,16 @@ public class GyroTurnCCWByPID implements StateMachine.State {
 //                }else {
 
             if(target < 0) {
-                leftFront.setPower(-power);
-                leftBack.setPower(-power);
-                rightFront.setPower(power);
-                rightBack.setPower(power);
-            }
-            else {
                 leftFront.setPower(power);
                 leftBack.setPower(power);
                 rightFront.setPower(-power);
                 rightBack.setPower(-power);
+            }
+            else {
+                leftFront.setPower(-power);
+                leftBack.setPower(-power);
+                rightFront.setPower(power);
+                rightBack.setPower(power);
             }
         } while (!pidRotate.onTarget());
 

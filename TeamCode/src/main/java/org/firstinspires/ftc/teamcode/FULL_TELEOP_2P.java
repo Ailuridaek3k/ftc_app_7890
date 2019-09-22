@@ -117,7 +117,7 @@ public class FULL_TELEOP_2P extends OpMode {
         */
         float lockMotorPower = gamepad2.right_stick_y;
         lockMotor.setPower(lockMotorPower);
-         
+
         /*
         ---TELEMETRY & TESTING---
          */

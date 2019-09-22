@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -22,11 +21,15 @@ import java.util.ArrayList;
 
 
 
-public class gyroTurnByPID implements StateMachine.State {
+public class funStrafeByPID implements StateMachine.State {
 
-
+    int newleftBackTarget;
+    int newrightBackTarget;
+    int  newleftFrontTarget;
+    int  newrightFrontTarget;
+    double distance;
     boolean running = true;
-    boolean clockwise;
+    boolean right;
     double angle;
     DcMotor leftFront;
     DcMotor rightFront;
@@ -56,16 +59,17 @@ public class gyroTurnByPID implements StateMachine.State {
 
     private State NextState;
 
-    public gyroTurnByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
+    public funStrafeByPID(double target, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU, boolean RIGHT){
 
         driveSpeed = speed;
-        target = angleTarget;
+       // target = angleTarget;
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
         rightBack = motor.get(3);
         imu = IMU;
-        //clockwise = CLOCKWISE;
+        right = RIGHT;
+        distance = target;
 
     }
 
@@ -94,17 +98,24 @@ public class gyroTurnByPID implements StateMachine.State {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
+        newleftBackTarget = leftBack.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+        newrightBackTarget = rightBack.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+        newleftFrontTarget = leftFront.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+        newrightFrontTarget = rightFront.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
     }
 
     @Override
     public StateMachine.State update() {
 
-        rotate((int)target, driveSpeed);
+        strafe(driveSpeed);
         return NextState;
 
 
     }
+
+
+
+
 
     private void resetAngle()
     {
@@ -137,20 +148,94 @@ public class gyroTurnByPID implements StateMachine.State {
 
         lastAngles = angles;
 
-        if(clockwise == false){
+        if(right == false){
             return globalAngle*1;
-        }else if(clockwise == true){
+        }else if(right == true){
             return globalAngle*-1;
         }
-            else //if(!clockwise ==)
-              return globalAngle;
-        }
+        else //if(!clockwise ==)
+            return globalAngle;
+    }
 
     /**
-     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
-     * @param degrees Degrees to turn, + is left - is right
-     */
-    private void rotate(int degrees, double power)
+//     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+//    * @param degrees Degrees to turn, + is left - is right
+//     */
+//    private void rotate(int degrees, double power)
+//    {
+//        // restart imu angle tracking.
+//        resetAngle();
+//
+//        // start pid controller. PID controller will monitor the turn angle with respect to the
+//        // target angle and reduce power as we approach the target angle with a minimum of 20%.
+//        // This is to prevent the robots momentum from overshooting the turn after we turn off the
+//        // power. The PID controller reports onTarget() = true when the difference between turn
+//        // angle and target angle is within 2% of target (tolerance). This helps prevent overshoot.
+//        // The minimum power is determined by testing and must enough to prevent motor stall and
+//        // complete the turn. Note: if the gap between the starting power and the stall (minimum)
+//        // power is small, overshoot may still occur. Overshoot is dependant on the motor and
+//        // gearing configuration, starting power, weight of the robot and the on target tolerance.
+//
+//        pidRotate.reset();
+//        pidRotate.setSetpoint(degrees);
+//        pidRotate.setInputRange(0, 90);
+//        pidRotate.setOutputRange(.20, power);
+//        pidRotate.setTolerance(2);
+//        pidRotate.enable();
+//
+//        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+//        // clockwise (right).
+//
+//        // rotate until turn is completed.
+//
+//        if (degrees < 0)
+//        {
+//            // On right turn we have to get off zero first.
+//            while (getAngle() == 0)
+//            {
+//
+//                leftFront.setPower(power);
+//                leftBack.setPower(power);
+//                rightFront.setPower(-power);
+//                rightBack.setPower(-power);
+//
+//                wait(100);
+//            }
+//
+//            do
+//            {
+//                power = pidRotate.performPID(getAngle()); // power will be - on right turn.
+//                leftFront.setPower(-power);
+//                leftBack.setPower(-power);
+//                rightFront.setPower(power);
+//                rightBack.setPower(power);
+//            } while (!pidRotate.onTarget());
+//        }
+//        else    // left turn.
+//            do
+//            {
+//                power = pidRotate.performPID(getAngle()); // power will be + on left turn.
+//                leftFront.setPower(-power);
+//                leftBack.setPower(-power);
+//                rightFront.setPower(power);
+//                rightBack.setPower(power);
+//            } while (!pidRotate.onTarget());
+//
+//        // turn the motors off.
+//        leftFront.setPower(0);
+//        leftBack.setPower(0);
+//        rightFront.setPower(0);
+//        rightBack.setPower(0);
+//
+//
+//        // wait for rotation to stop.
+//        wait(500);
+//
+//        // reset angle tracking on new heading.
+//        resetAngle();
+//    }
+
+    private void strafe(double power)
     {
         // restart imu angle tracking.
         resetAngle();
@@ -166,96 +251,38 @@ public class gyroTurnByPID implements StateMachine.State {
         // gearing configuration, starting power, weight of the robot and the on target tolerance.
 
         pidRotate.reset();
-        pidRotate.setSetpoint(degrees);
-        pidRotate.setInputRange(0, 359);
-        pidRotate.setOutputRange(.20, power);
+        //pidRotate.setSetpoint(degrees);
+        //pidRotate.setInputRange(0, 359);
+       // pidRotate.setOutputRange(.20, power);
         pidRotate.setTolerance(2);
+        //pidRotate.enable();
+
+        double strafeCorrection = pidRotate.performPID(getAngle());
+        double correction = pidRotate.performPID(getAngle());
+        pidRotate.setSetpoint(0);
+        pidRotate.setOutputRange(0, power);
+        pidRotate.setInputRange(-90, 90);
         pidRotate.enable();
 
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        // clockwise (right).
-
-        // rotate until turn is completed.
-
-//        if (degrees < 0)
-//        {
-//            // On right turn we have to get off zero first.
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }
-//
-//            do
-//            {
-//                power = pidRotate.performPID(getAngle()); // power will be - on right turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }
-//            } while (!pidRotate.onTarget());
-//        }
-//        else
-
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }// left turn.
-            do
+        if(!right){
+            //if(newleftBackTarget > leftBack.getCurrentPosition() && newrightBackTarget > rightBack.getCurrentPosition() && newleftFrontTarget > leftFront.getCurrentPosition() && newrightFrontTarget > rightFront.getCurrentPosition() )
+            while(newleftBackTarget > -leftBack.getCurrentPosition() && newrightBackTarget > rightBack.getCurrentPosition() && newleftFrontTarget > leftFront.getCurrentPosition() && newrightFrontTarget > -rightFront.getCurrentPosition())
+            { leftFront.setPower(power + correction);//strafing
+            leftBack.setPower(-power - correction);
+            rightFront.setPower(-power - correction);
+            rightBack.setPower(power + correction);}
+        }
+        else{
+            while(newleftBackTarget > leftBack.getCurrentPosition() && newrightBackTarget > -rightBack.getCurrentPosition() && newleftFrontTarget > -leftFront.getCurrentPosition() && newrightFrontTarget > rightFront.getCurrentPosition())
             {
-                power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
+            leftFront.setPower(-power - correction);//strafing
+            leftBack.setPower(power + correction);
+            rightFront.setPower(power + correction);
+            rightBack.setPower(-power - correction);
 
-                if(target < 0) {
-                    leftFront.setPower(power);
-                    leftBack.setPower(power);
-                    rightFront.setPower(-power);
-                    rightBack.setPower(-power);
-                }
-                else {
-                    leftFront.setPower(-power);
-                    leftBack.setPower(-power);
-                    rightFront.setPower(power);
-                    rightBack.setPower(power);
-                }
-            } while (!pidRotate.onTarget());
+            }
+
+        }
 
         // turn the motors off.
         leftFront.setPower(0);
@@ -265,7 +292,7 @@ public class gyroTurnByPID implements StateMachine.State {
 
 
         // wait for rotation to stop.
-     //   wait(500);
+        //   wait(500);
 
         // reset angle tracking on new heading.
         resetAngle();
@@ -281,6 +308,7 @@ public class gyroTurnByPID implements StateMachine.State {
 
 
     }
+
 
     public class PIDController
     {
