@@ -25,6 +25,7 @@ public class FULL_TELEOP_2P extends OpMode {
     DcMotor leftBack;
     DcMotor rightBack;
     DcMotor liftMotor;
+    DcMotor intakeMotor;
 
     /*
     ---DIRECTION SETUP---
@@ -49,7 +50,8 @@ public class FULL_TELEOP_2P extends OpMode {
         rightFront = hardwareMap.dcMotor.get("right front");
         rightBack = hardwareMap.dcMotor.get("right back");
         liftMotor = hardwareMap.dcMotor.get("lift motor");
-        outtake = hardwareMap.servo.get("outtake");
+        intakeMotor = hardwareMap.dcMotor.get("intake motor");
+
 
         /*
         ---DIRECTIONS---
@@ -98,10 +100,15 @@ public class FULL_TELEOP_2P extends OpMode {
         /*
         ---LIFT CONTROLLER SETUP---
          */
-        float liftControlUp = gamepad1.right_trigger;
-        float liftControlDown = gamepad1.left_trigger;
+        float liftControlUp = gamepad2.right_trigger;
+        float liftControlDown = gamepad2.left_trigger;
         liftMotor.setPower(-liftControlDown);
         liftMotor.setPower(liftControlUp);
+        /*
+        ---INTAKE MOTOR---
+        */
+        float intakeMotorPower = gamepad2.left_stick_y;
+        intakeMotor.setPower(intakeMotorPower);
 
         /*
         ---TELEMETRY & TESTING---
