@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;3
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import java.util.ArrayList;
 
 
@@ -24,11 +25,13 @@ public class FULL_AUTO_BT extends OpMode
     ---SENSORS---
      */
     ModernRoboticsI2cRangeSensor sideSensor1;
+    DigitalChannel ts;
 
     /*
     ---STATES---
      */
     distanceMoveState rangeState;
+    touchMoveState touchState;
 
 
 
@@ -57,6 +60,7 @@ public class FULL_AUTO_BT extends OpMode
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
         sideSensor1 = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "ss1");
+        ts = hardwareMap.get(DigitalChannel.class, "sensor_digital");
 
 
         /*
@@ -85,11 +89,13 @@ public class FULL_AUTO_BT extends OpMode
         ---USING STATES---
          */
         rangeState = new distanceMoveState(motors, mrrs, 16); //16 is a test value for now
+        touchState = new touchMoveState(motors, ts);
 
         /*
         ---ORDERING STATES---
          */
-        rangeState.setNextState(null);
+        rangeState.setNextState(touchState);
+        touchState.setNextState(null);
     }
 
 

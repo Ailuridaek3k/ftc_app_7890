@@ -2,28 +2,31 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.StateMachine.State;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 import java.util.ArrayList;
 
-public class distanceMoveState implements State{
+public class touchMoveState implements State{
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
+    DigitalChannel ts;
     double targetDistance;
     State NextState;
-    ModernRoboticsI2cRangeSensor sideSensor1, sideSensor2, distSensor;
+
     String turn = "null";
     boolean isMoved = false;
 
-    public distanceMoveState( ArrayList<DcMotor> motor,  ArrayList<ModernRoboticsI2cRangeSensor> mrrs, double dist){
+    public touchMoveState(ArrayList<DcMotor> motor, DigitalChannel touchSensor){
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
         rightBack = motor.get(3);
-        distSensor = mrrs.get(2);
-        targetDistance = dist;
+        ts = touchSensor;
 
 
     }
@@ -40,10 +43,10 @@ public class distanceMoveState implements State{
     }
 
     public State update(){
-        if (distSensor.getDistance(DistanceUnit.INCH) > targetDistance && !isMoved){
+        if(ts.getState() == false && !isMoved){
             move("forward", .5);
             return this;
-        } else if (distSensor.getDistance(DistanceUnit.INCH) <= targetDistance && !isMoved){
+        } else if (ts.getState() == true && !isMoved){
             isMoved = true;
             stop(leftFront, leftBack, rightFront, rightBack);
             return this;
