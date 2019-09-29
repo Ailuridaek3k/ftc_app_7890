@@ -22,6 +22,12 @@ public class FULL_AUTO_BT extends OpMode
     DcMotor rightBack;
 
     /*
+    ---SERVOS---
+     */
+    Servo armServo;
+
+
+    /*
     ---SENSORS---
      */
     ModernRoboticsI2cRangeSensor sideSensor1;
@@ -32,6 +38,8 @@ public class FULL_AUTO_BT extends OpMode
      */
     distanceMoveState rangeState;
     touchMoveState touchState;
+    armMoveState armState;
+
 
 
 
@@ -59,8 +67,7 @@ public class FULL_AUTO_BT extends OpMode
         leftFront = hardwareMap.dcMotor.get("left front");
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
-        sideSensor1 = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "ss1");
-        ts = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+        armServo = hardwareMap.servo.get("arm motor");
 
 
         /*
@@ -90,13 +97,15 @@ public class FULL_AUTO_BT extends OpMode
          */
         rangeState = new distanceMoveState(motors, mrrs, 16); //16 is a test value for now
         touchState = new touchMoveState(motors, ts);
+        armState = new armMoveState(armServo, -1);
 
 
         /*
         ---ORDERING STATES---
          */
         rangeState.setNextState(touchState);
-        touchState.setNextState(null);
+        touchState.setNextState(armState);
+        armState.setNextState(null);
     }
 
 
