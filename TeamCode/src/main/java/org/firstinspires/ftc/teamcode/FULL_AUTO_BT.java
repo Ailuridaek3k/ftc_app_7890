@@ -41,6 +41,7 @@ public class FULL_AUTO_BT extends OpMode
     distanceMoveState rangeState;
     touchMoveState touchState;
     armMoveState armState;
+    distanceMoveState rangeState2;
 
 
 
@@ -101,7 +102,7 @@ public class FULL_AUTO_BT extends OpMode
         rangeState = new distanceMoveState(motors, sideSensor1, 16); //16 is a test value for now
         touchState = new touchMoveState(motors, ts);
         armState = new armMoveState(armServo, -1);
-        rangeState = new distanceMoveState(motors, sideSensor2, 3);
+        rangeState2 = new distanceMoveState(motors, sideSensor2, 3);
 
 
         /*
@@ -109,7 +110,8 @@ public class FULL_AUTO_BT extends OpMode
          */
         rangeState.setNextState(touchState);
         touchState.setNextState(armState);
-        armState.setNextState(null);
+        armState.setNextState(rangeState2);
+        rangeState2.setNextState(null);
     }
 
 
