@@ -13,16 +13,16 @@ public class distanceMoveState implements State{
     DcMotor rightBack;
     double targetDistance;
     State NextState;
-    ModernRoboticsI2cRangeSensor sideSensor1, sideSensor2, distSensor;
+    ModernRoboticsI2cRangeSensor distSensor;
     String turn = "null";
     boolean isMoved = false;
 
-    public distanceMoveState( ArrayList<DcMotor> motor,  ArrayList<ModernRoboticsI2cRangeSensor> mrrs, double dist){
+    public distanceMoveState( ArrayList<DcMotor> motor, ModernRoboticsI2cRangeSensor distSense, double dist){
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
         rightBack = motor.get(3);
-        distSensor = mrrs.get(2);
+        distSensor = distSense;
         targetDistance = dist;
 
 

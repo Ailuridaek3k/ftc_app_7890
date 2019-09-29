@@ -31,6 +31,7 @@ public class FULL_AUTO_BT extends OpMode
     ---SENSORS---
      */
     ModernRoboticsI2cRangeSensor sideSensor1;
+    ModernRoboticsI2cRangeSensor sideSensor2; //Sense distance from wall when moving the tray
     DigitalChannel ts;
 
     /*
@@ -84,6 +85,7 @@ public class FULL_AUTO_BT extends OpMode
         motors.add(rightBack);
         motors.add(leftBack);
         mrrs.add(sideSensor1);
+        mrrs.add(sideSensor2);
 
 
         // Set all motors to zero power
@@ -95,9 +97,10 @@ public class FULL_AUTO_BT extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, mrrs, 16); //16 is a test value for now
+        rangeState = new distanceMoveState(motors, sideSensor1, 16); //16 is a test value for now
         touchState = new touchMoveState(motors, ts);
         armState = new armMoveState(armServo, -1);
+        rangeState = new distanceMoveState(motors, sideSensor2, 3);
 
         /*
         ---ORDERING STATES---
