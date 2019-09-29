@@ -91,6 +91,7 @@ public class FULL_AUTO_BT extends OpMode
         rangeState = new distanceMoveState(motors, mrrs, 16); //16 is a test value for now
         touchState = new touchMoveState(motors, ts);
 
+
         /*
         ---ORDERING STATES---
          */
