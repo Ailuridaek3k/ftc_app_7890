@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class armMoveState implements State {
     Servo armServo;
-    double armPosition = -1;
+    double armPosition;
 
     public armMoveState(Servo lock, double pos){
         armServo = lock;
@@ -39,19 +39,6 @@ public class armMoveState implements State {
 
     }
 
-    public void move(String direction, double speed) {
-        switch (direction) {
-            case "forward":
-                //arm moves forward
-                armServo.setPower(speed);
-                break;
-            case "backward":
-                //robot moves forwards
-                armServo.setPower(-speed)
-                break;
-
-        }
-    }
 
 
 }

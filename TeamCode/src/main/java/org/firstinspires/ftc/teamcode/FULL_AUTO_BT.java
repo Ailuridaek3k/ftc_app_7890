@@ -22,6 +22,13 @@ public class FULL_AUTO_BT extends OpMode
     DcMotor rightBack;
 
     /*
+    ---SERVOS---
+     */
+    Servo armServo;
+
+     */
+
+    /*
     ---SENSORS---
      */
     ModernRoboticsI2cRangeSensor sideSensor1;
@@ -32,6 +39,7 @@ public class FULL_AUTO_BT extends OpMode
      */
     distanceMoveState rangeState;
     touchMoveState touchState;
+
 
 
 
