@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.StateMachine.State;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class armMoveState implements State {
     Servo armServo;
     double armPosition;
+    State NextState;
 
     public armMoveState(Servo lock, double pos){
         armServo = lock;
@@ -28,14 +29,8 @@ public class armMoveState implements State {
 
 
     public State update() {
-            armServo.setPosition(armPosition);
-
-
-    }
-
-    public void stop(Servo armServo) {
-        //armServo.setPower(0.0);
-
+        armServo.setPosition(armPosition);
+        return NextState;
 
     }
 
