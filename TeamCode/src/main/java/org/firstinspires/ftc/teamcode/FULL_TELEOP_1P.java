@@ -28,6 +28,7 @@ public class FULL_TELEOP_1P extends OpMode {
     DcMotor liftMotor;
     DcMotor intakeMotor;
     DcMotor lockMotor;
+    Servo lock;
 
     /*
     ---DIRECTION SETUP---
@@ -52,7 +53,8 @@ public class FULL_TELEOP_1P extends OpMode {
         rightBack = hardwareMap.dcMotor.get("right back");
         liftMotor = hardwareMap.dcMotor.get("lift motor");
         intakeMotor = hardwareMap.dcMotor.get("intake motor");
-        lockMotor = hardwareMap.dcMotor.get("lock motor");
+      //  lockMotor = hardwareMap.dcMotor.get("lock motor");
+        lock = hardwareMap.servo.get("lock");
 
         /*
         ---DIRECTIONS---
@@ -123,12 +125,19 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---LOCKING MECHANISM---
          */
-        double lockSpeed = 0.7; //a testing value for now
+//        double lockSpeed = 0.7; //a testing value for now
+//        while(gamepad1.dpad_up) {
+//            lockMotor.setPower(-lockSpeed);
+//        }
+//        while (gamepad1.dpad_down){
+//            lockMotor.setPower(lockSpeed);
+//        }
+
         while(gamepad1.dpad_up) {
-            lockMotor.setPower(-lockSpeed);
+            lock.setPosition(-1.0);
         }
         while (gamepad1.dpad_down){
-            lockMotor.setPower(lockSpeed);
+            lock.setPosition(1.0);
         }
 
         /*

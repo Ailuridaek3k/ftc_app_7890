@@ -126,6 +126,7 @@ public class FULL_AUTO_BT extends OpMode
     public void loop()  {
 
         telemetry.addData("sensor 1", sideSensor1.getDistance(DistanceUnit.INCH));
+        telemetry.addData("sensor 2", sideSensor2.getDistance(DistanceUnit.INCH));
         telemetry.addData("turn", rangeState.getTurn());
 
         telemetry.update();
