@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 7890 Space Lions 2019 "FULL TELEOP"
 author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
+DESCRIPTION: This code is used to implement a 2-Player TeleOp setup.
  */
 @TeleOp(name="FULL TELEOP 2P", group="Tele Op")
 public class FULL_TELEOP_2P extends OpMode {
