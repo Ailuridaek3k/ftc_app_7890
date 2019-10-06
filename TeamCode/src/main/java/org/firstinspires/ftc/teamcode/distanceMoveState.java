@@ -6,6 +6,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.StateMachine.State;
 import java.util.ArrayList;
 
+/*
+7890 Space Lions 2019 "DISTANCEMOVESTATE"
+author: 7890 Software (TEAM MEMBERS)
+GOALS: (GOALS)
+DESCRIPTION: This code is a distance move state, used to simplify our autonomous code.
+It simply moves the robot according to the directions in our autonomous.
+ */
 public class distanceMoveState implements State{
     DcMotor leftFront;
     DcMotor rightFront;

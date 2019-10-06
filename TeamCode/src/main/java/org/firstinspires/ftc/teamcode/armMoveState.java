@@ -8,7 +8,12 @@ import org.firstinspires.ftc.teamcode.StateMachine.State;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import java.util.ArrayList;
-
+/*
+7890 Space Lions 2019 "ARM MOVE STATE"
+author: 7890 Software (TEAM MEMBERS)
+GOALS: (GOALS)
+DESCRIPTION: This code is used to simplify our autonomous code for our arm.
+ */
 public class armMoveState implements State {
     Servo armServo;
     double armPosition;

@@ -9,7 +9,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import java.util.ArrayList;
 
-
+/*
+7890 Space Lions 2019 "FULL AUTO BLUTRAY"
+author: 7890 Software (TEAM MEMBERS)
+GOALS: (GOALS)
+DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray.
+ */
 @Autonomous(name="FULL AUTO BLUTRAY", group="Iterative Opmode")
 public class FULL_AUTO_BT extends OpMode
 {
