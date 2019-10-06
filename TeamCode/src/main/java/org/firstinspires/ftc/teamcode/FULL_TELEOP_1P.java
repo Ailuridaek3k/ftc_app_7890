@@ -111,13 +111,13 @@ public class FULL_TELEOP_1P extends OpMode {
         ---INTAKE WHEELS---
          */
         int spin = 1;
-        if(gamepad1.a && (spin != 1)){
+        if(gamepad1.x && (spin != 1)){
             spin = 1;
-        }else if(gamepad1.a && (spin != -1)){
+        }else if(gamepad1.x && (spin != -1)){
             spin = -1;
-        }else if(gamepad1.a && (spin == 1)){
+        }else if(gamepad1.x && (spin == 1)){
             spin = 0;
-        }else if(gamepad1.a && (spin == -1)){
+        }else if(gamepad1.x && (spin == -1)){
             spin = 0;
         }
         intakeMotor.setPower(spin);
