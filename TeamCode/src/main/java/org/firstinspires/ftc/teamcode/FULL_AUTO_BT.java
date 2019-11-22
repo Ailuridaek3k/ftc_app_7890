@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,14 +37,15 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---SENSORS---
      */
-    ModernRoboticsI2cRangeSensor sideSensor1;
-    ModernRoboticsI2cRangeSensor sideSensor2; //Sense distance from wall when moving the tray
+    ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
+    BNO055IMU imu;
 
     /*
     ---STATES---
      */
     distanceMoveState rangeState;
+    GyroTurnCWByPID turnState;
     touchMoveState touchState;
     armMoveState armState;
     distanceMoveState rangeState2;
@@ -91,8 +93,7 @@ public class FULL_AUTO_BT extends OpMode
         motors.add(leftFront);
         motors.add(rightBack);
         motors.add(leftBack);
-        mrrs.add(sideSensor1);
-        mrrs.add(sideSensor2);
+        mrrs.add(distanceSensor);
 
 
         // Set all motors to zero power
@@ -104,16 +105,18 @@ public class FULL_AUTO_BT extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, sideSensor1, 16); //16 is a test value for now
+        rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
+        turnState = new GyroTurnCWByPID(90, 0.5, motors, imu);
         touchState = new touchMoveState(motors, ts);
         armState = new armMoveState(armServo, -1);
-        rangeState2 = new distanceMoveState(motors, sideSensor2, 3);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 3);
 
 
         /*
         ---ORDERING STATES---
          */
-        rangeState.setNextState(touchState);
+        rangeState.setNextState(turnState);
+        turnState.setNextState(touchState);
         touchState.setNextState(armState);
         armState.setNextState(rangeState2);
         rangeState2.setNextState(null);
@@ -130,8 +133,7 @@ public class FULL_AUTO_BT extends OpMode
     @Override
     public void loop()  {
 
-        telemetry.addData("sensor 1", sideSensor1.getDistance(DistanceUnit.INCH));
-        telemetry.addData("sensor 2", sideSensor2.getDistance(DistanceUnit.INCH));
+        telemetry.addData("sensor 1", distanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("turn", rangeState.getTurn());
 
         telemetry.update();
