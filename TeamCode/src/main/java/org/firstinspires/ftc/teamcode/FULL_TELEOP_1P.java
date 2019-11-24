@@ -41,6 +41,8 @@ public class FULL_TELEOP_1P extends OpMode {
      */
     //no servos for now
 
+    int spin = 0;
+
     @Override
     public void init() {
 
@@ -52,9 +54,9 @@ public class FULL_TELEOP_1P extends OpMode {
         rightFront = hardwareMap.dcMotor.get("right front");
         rightBack = hardwareMap.dcMotor.get("right back");
         liftMotor = hardwareMap.dcMotor.get("lift motor");
-        intakeMotor = hardwareMap.dcMotor.get("intake motor");
+      //  intakeMotor = hardwareMap.dcMotor.get("intake motor");
       //  lockMotor = hardwareMap.dcMotor.get("lock motor");
-        lock = hardwareMap.servo.get("lock");
+        // lock = hardwareMap.servo.get("lock");
 
         /*
         ---DIRECTIONS---
@@ -79,17 +81,61 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---DRIVE CONTROLLER SETUP---
          */
-        drive = -gamepad1.left_stick_y;
-        turn = gamepad1.right_stick_x;
-        strafe = -gamepad1.left_stick_x;
 
-        /*
-        ---MECANUM DRIVING CALCULATIONS---
-         */
-        double lfDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
-        double lbDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
-        double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
-        double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
+
+        drive = gamepad1.left_stick_y;
+        turn = gamepad1.right_stick_x;
+        strafe = gamepad1.left_stick_x;
+
+//
+//        /*
+//        ---MECANUM DRIVING CALCULATIONS---
+//         */
+//        double lfDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
+//        double lbDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
+//        double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
+//        double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
+
+
+        double lfDrive = 0;
+        double lbDrive = 0;
+        double rfDrive = 0;
+        double rbDrive = 0;
+
+        if(strafe > 0.1){
+            lfDrive = -1;
+            lbDrive = 1;
+            rfDrive = 1;
+            rbDrive = -1;
+        }else if(strafe < -0.1) {
+            lfDrive = 1;
+            lbDrive = -1;
+            rfDrive = -1;
+            rbDrive = 1;
+        }
+        else if(turn > 0.1){
+            lfDrive = 1;
+            lbDrive = 1;
+            rfDrive = -1;
+            rbDrive = -1;
+        }else if(turn < -0.1) {
+            lfDrive = -1;
+            lbDrive = -1;
+            rfDrive = 1;
+            rbDrive = 1;
+        }
+        else if(drive > 0.1){
+            lfDrive = 1;
+            lbDrive = -1;
+            rfDrive = 1;
+            rbDrive = -1;
+
+        }else if(drive < -0.1) {
+            lfDrive = -1;
+            lbDrive = 1;
+            rfDrive = -1;
+            rbDrive = 1;
+        }
 
         /*
         ---WHEEL POWERS---
@@ -110,17 +156,17 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---INTAKE WHEELS---
          */
-        int spin = 1;
-        if(gamepad1.x && (spin != 1)){
+        if(gamepad1.x && spin == 0){
+            //first time around
+            spin = 1; //whenever you turn it on it will do 1
+        }else if(gamepad1.x && (spin != 1)){
             spin = 1;
         }else if(gamepad1.x && (spin != -1)){
             spin = -1;
-        }else if(gamepad1.x && (spin == 1)){
-            spin = 0;
-        }else if(gamepad1.x && (spin == -1)){
+        }else if(gamepad1.y){
             spin = 0;
         }
-        intakeMotor.setPower(spin);
+      //  intakeMotor.setPower(spin);
 
         /*
         ---LOCKING MECHANISM---
@@ -132,14 +178,14 @@ public class FULL_TELEOP_1P extends OpMode {
 //        while (gamepad1.dpad_down){
 //            lockMotor.setPower(lockSpeed);
 //        }
-
+/*
         while(gamepad1.dpad_up) {
             lock.setPosition(-1.0);
         }
         while (gamepad1.dpad_down){
             lock.setPosition(1.0);
         }
-
+*/
         /*
         ---TELEMETRY & TESTING---
          */
