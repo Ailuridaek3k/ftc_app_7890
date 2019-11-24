@@ -87,55 +87,55 @@ public class FULL_TELEOP_1P extends OpMode {
         turn = gamepad1.right_stick_x;
         strafe = gamepad1.left_stick_x;
 
+
+        /*
+        ---MECANUM DRIVING CALCULATIONS---
+         */
+        double lfDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
+        double lbDrive = Range.clip(-drive + turn + strafe, -1.0, 1.0);
+        double rfDrive = Range.clip(-drive + turn -strafe, -1.0, 1.0);
+        double rbDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
+
+
+//        double lfDrive = 0;
+//        double lbDrive = 0;
+//        double rfDrive = 0;
+//        double rbDrive = 0;
 //
-//        /*
-//        ---MECANUM DRIVING CALCULATIONS---
-//         */
-//        double lfDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
-//        double lbDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
-//        double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
-//        double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
-
-
-        double lfDrive = 0;
-        double lbDrive = 0;
-        double rfDrive = 0;
-        double rbDrive = 0;
-
-        if(strafe > 0.1){
-            lfDrive = -1;
-            lbDrive = 1;
-            rfDrive = 1;
-            rbDrive = -1;
-        }else if(strafe < -0.1) {
-            lfDrive = 1;
-            lbDrive = -1;
-            rfDrive = -1;
-            rbDrive = 1;
-        }
-        else if(turn > 0.1){
-            lfDrive = 1;
-            lbDrive = 1;
-            rfDrive = -1;
-            rbDrive = -1;
-        }else if(turn < -0.1) {
-            lfDrive = -1;
-            lbDrive = -1;
-            rfDrive = 1;
-            rbDrive = 1;
-        }
-        else if(drive > 0.1){
-            lfDrive = 1;
-            lbDrive = -1;
-            rfDrive = 1;
-            rbDrive = -1;
-
-        }else if(drive < -0.1) {
-            lfDrive = -1;
-            lbDrive = 1;
-            rfDrive = -1;
-            rbDrive = 1;
-        }
+//        if(strafe > 0.1){
+//            lfDrive = -1;
+//            lbDrive = 1;
+//            rfDrive = 1;
+//            rbDrive = -1;
+//        }else if(strafe < -0.1) {
+//            lfDrive = 1;
+//            lbDrive = -1;
+//            rfDrive = -1;
+//            rbDrive = 1;
+//        }
+//        else if(turn > 0.1){
+//            lfDrive = 1;
+//            lbDrive = 1;
+//            rfDrive = -1;
+//            rbDrive = -1;
+//        }else if(turn < -0.1) {
+//            lfDrive = -1;
+//            lbDrive = -1;
+//            rfDrive = 1;
+//            rbDrive = 1;
+//        }
+//        else if(drive > 0.1){
+//            lfDrive = 1;
+//            lbDrive = -1;
+//            rfDrive = 1;
+//            rbDrive = -1;
+//
+//        }else if(drive < -0.1) {
+//            lfDrive = -1;
+//            lbDrive = 1;
+//            rfDrive = -1;
+//            rbDrive = 1;
+//        }
 
         /*
         ---WHEEL POWERS---

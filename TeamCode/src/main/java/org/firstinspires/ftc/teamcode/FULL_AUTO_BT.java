@@ -133,7 +133,7 @@ public class FULL_AUTO_BT extends OpMode
     @Override
     public void loop()  {
 
-        telemetry.addData("sensor 1", distanceSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("turn", rangeState.getTurn());
 
         telemetry.update();
