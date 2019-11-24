@@ -54,7 +54,7 @@ public class FULL_TELEOP_1P extends OpMode {
         rightFront = hardwareMap.dcMotor.get("right front");
         rightBack = hardwareMap.dcMotor.get("right back");
         liftMotor = hardwareMap.dcMotor.get("lift motor");
-      //  intakeMotor = hardwareMap.dcMotor.get("intake motor");
+        intakeMotor = hardwareMap.dcMotor.get("intake motor");
       //  lockMotor = hardwareMap.dcMotor.get("lock motor");
         // lock = hardwareMap.servo.get("lock");
 
@@ -83,18 +83,18 @@ public class FULL_TELEOP_1P extends OpMode {
          */
 
 
-        drive = gamepad1.left_stick_y;
+        drive = -gamepad1.left_stick_y;
         turn = gamepad1.right_stick_x;
-        strafe = gamepad1.left_stick_x;
+        strafe = -gamepad1.left_stick_x;
 
 
         /*
         ---MECANUM DRIVING CALCULATIONS---
          */
-        double lfDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
-        double lbDrive = Range.clip(-drive + turn + strafe, -1.0, 1.0);
-        double rfDrive = Range.clip(-drive + turn -strafe, -1.0, 1.0);
-        double rbDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
+        double lfDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
+        double lbDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
+        double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
+        double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
 
 
 //        double lfDrive = 0;
@@ -145,6 +145,8 @@ public class FULL_TELEOP_1P extends OpMode {
         rightFront.setPower(rfDrive);
         rightBack.setPower(rbDrive);
 
+        //problem: left stick y strafes, left stick x turns, right stick x moves forward and back
+
         /*
         ---LIFT CONTROLLER SETUP---
          */
@@ -166,7 +168,7 @@ public class FULL_TELEOP_1P extends OpMode {
         }else if(gamepad1.y){
             spin = 0;
         }
-      //  intakeMotor.setPower(spin);
+        intakeMotor.setPower(spin);
 
         /*
         ---LOCKING MECHANISM---
