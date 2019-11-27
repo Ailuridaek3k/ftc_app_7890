@@ -29,6 +29,7 @@ public class FULL_TELEOP_1P extends OpMode {
     DcMotor intakeMotor;
     DcMotor lockMotor;
     Servo lock;
+    Servo armServo;
 
     /*
     ---DIRECTION SETUP---
@@ -57,6 +58,8 @@ public class FULL_TELEOP_1P extends OpMode {
         intakeMotor = hardwareMap.dcMotor.get("intake motor");
       //  lockMotor = hardwareMap.dcMotor.get("lock motor");
         // lock = hardwareMap.servo.get("lock");
+
+        armServo = hardwareMap.servo.get("arm motor");
 
         /*
         ---DIRECTIONS---
@@ -170,6 +173,28 @@ public class FULL_TELEOP_1P extends OpMode {
         }
         intakeMotor.setPower(spin);
 
+
+        //testing a servo
+
+        double b = 2;
+        if(gamepad2.x) {
+            b = 1;
+        }
+        else if (gamepad2.y) {
+            b = -1;
+        }
+        else if (gamepad2.a) {
+            b = 0;
+        }
+        if(b == 1) {
+            armServo.setPosition(1.0);
+        }
+        if (b == -1) {
+            armServo.setPosition(-1.0);
+        }
+        if (b == 0) {
+            armServo.setPosition(0.0);
+        }
         /*
         ---LOCKING MECHANISM---
          */
