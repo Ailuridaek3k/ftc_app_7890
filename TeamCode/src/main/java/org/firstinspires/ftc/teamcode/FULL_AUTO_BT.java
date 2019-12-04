@@ -130,8 +130,9 @@ public class FULL_AUTO_BT extends OpMode
          */
         rangeState.setNextState(turnState);
         turnState.setNextState(touchState);
-        touchState.setNextState(null);
-        armServo.setPosition(-1.0);
+        touchState.setNextState(armState);
+        armState.setNextState(null);
+        //armServo.setPosition(-1.0);
 
         /*
         rangeState.setNextState(turnState);
