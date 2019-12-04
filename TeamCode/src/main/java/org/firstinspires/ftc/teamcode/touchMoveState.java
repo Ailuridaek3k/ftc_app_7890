@@ -43,10 +43,10 @@ public class touchMoveState implements State{
     }
 
     public State update(){
-        if(ts.getState() == false && !isMoved) {
-            move("forward", .5);
+        if(ts.getState() == true && !isMoved) {
+            move("backward", .5);
             return this;
-        } else if (ts.getState() == true && !isMoved) {
+        } else if (ts.getState() == false && !isMoved) {
             isMoved = true;
             stop(leftFront, leftBack, rightFront, rightBack);
             return this;
