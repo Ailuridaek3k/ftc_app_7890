@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -21,9 +22,10 @@ import java.util.ArrayList;
 
 
 
-public class GyroTurnCCWByPID implements State {
+public class GyroTurnCCWByPID implements StateMachine.State {
 
-//HAVE TO INPUT A POSITIVE NUMBER
+    //HAS TO INPUT A NEGATIVE NO.
+
     boolean running = true;
     boolean clockwise;
     double angle;
@@ -58,8 +60,7 @@ public class GyroTurnCCWByPID implements State {
     public GyroTurnCCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
 
         driveSpeed = speed;
-        target = Math.abs(angleTarget);
-
+        target =  Math.abs(angleTarget)*-1;
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
@@ -95,10 +96,11 @@ public class GyroTurnCCWByPID implements State {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
+
     }
 
     @Override
-    public State update() {
+    public StateMachine.State update() {
 
         rotate((int)target, driveSpeed);
         return NextState;
@@ -138,9 +140,9 @@ public class GyroTurnCCWByPID implements State {
         lastAngles = angles;
 
         if(clockwise == false){
-            return globalAngle*1;
+            return globalAngle*1*(-1);
         }else if(clockwise == true){
-            return globalAngle*-1;
+            return globalAngle*-1 *(-1);
         }
         else //if(!clockwise ==)
             return globalAngle;
@@ -168,8 +170,8 @@ public class GyroTurnCCWByPID implements State {
         pidRotate.reset();
         pidRotate.setSetpoint(degrees);
         pidRotate.setInputRange(0, 359);
-        pidRotate.setOutputRange(.20, power);
-        pidRotate.setTolerance(2);
+        pidRotate.setOutputRange(.10, power);
+        pidRotate.setTolerance(.05);
         pidRotate.enable();
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
@@ -243,17 +245,19 @@ public class GyroTurnCCWByPID implements State {
 //                    rightBack.setPower(power);
 //                }else {
 
+
+            //Reverse reverse!
             if(target < 0) {
-                leftFront.setPower(-power);
-                leftBack.setPower(-power);
-                rightFront.setPower(power);
-                rightBack.setPower(power);
+                leftFront.setPower((1)*power);
+                leftBack.setPower((1)*power);
+                rightFront.setPower((1)*-power);
+                rightBack.setPower((1)*-power);
             }
             else {
-                leftFront.setPower(power);
-                leftBack.setPower(power);
-                rightFront.setPower(-power);
-                rightBack.setPower(-power);
+                leftFront.setPower((1)*-power);
+                leftBack.setPower((1)*-power);
+                rightFront.setPower((1)*power);
+                rightBack.setPower((1)*power);
             }
         } while (!pidRotate.onTarget());
 

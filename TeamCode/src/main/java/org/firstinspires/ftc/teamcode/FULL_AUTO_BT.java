@@ -9,6 +9,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import java.util.ArrayList;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 /*
 7890 Space Lions 2019 "FULL AUTO BLUTRAY"
@@ -65,11 +66,19 @@ public class FULL_AUTO_BT extends OpMode
     static final double TURN_SPEED = 0.5;
     int counter = 0;
 
-
-
-
-    @Override
     public void init() {
+
+         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+            parameters.mode                = BNO055IMU.SensorMode.IMU;
+            parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+            parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+            parameters.loggingEnabled      = false;
+
+            imu = hardwareMap.get(BNO055IMU.class, "imu"); // lmao hardware what a joke
+
+            imu.initialize(parameters);
+
         /*
         ---HARDWARE MAP---
          */
@@ -78,8 +87,11 @@ public class FULL_AUTO_BT extends OpMode
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
         armServo = hardwareMap.servo.get("arm motor");
+
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
+        //imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //imu.initialize(parameters);
 
         /*
         ---MOTOR DIRECTIONS---
@@ -98,16 +110,16 @@ public class FULL_AUTO_BT extends OpMode
 
 
         // Set all motors to zero power
-        rightFront.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        leftBack.setPower(0);
+//        rightFront.setPower(0);
+//        leftFront.setPower(0);
+//        rightBack.setPower(0);
+//        leftBack.setPower(0);
 
         /*
         ---USING STATES---
          */
         rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
-        turnState = new GyroTurnCWByPID(90, 0.5, motors, imu);
+        turnState = new GyroTurnCWByPID(270, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
         armState = new armMoveState(armServo, -1);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 3);
@@ -117,7 +129,9 @@ public class FULL_AUTO_BT extends OpMode
         ---ORDERING STATES---
          */
         rangeState.setNextState(turnState);
-        turnState.setNextState(null);
+        turnState.setNextState(touchState);
+        touchState.setNextState(null);
+        armServo.setPosition(-1.0);
 
         /*
         rangeState.setNextState(turnState);
@@ -131,27 +145,28 @@ public class FULL_AUTO_BT extends OpMode
 
     @Override
     public void start(){
+        armServo.setPosition(0.0);
         machine = new StateMachine(rangeState);
-
+        //machine = new StateMachine(turnState);
     }
 
 
-    @Override
+    private StateMachine machine;
     public void loop()  {
 
-        telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("turn", rangeState.getTurn());
+        //telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
+        //telemetry.addData("turn", rangeState.getTurn());
+        //telemetry.addData("turn", turnState.getAngle());
 
-        telemetry.update();
+        //telemetry.update();
         machine.update();
 
     }
 
-    private StateMachine machine;
 
-    @Override
-    public void stop() {
-    }
+//    @Override
+//    public void stop() {
+//    }
 
 }
 
