@@ -29,10 +29,10 @@ public class armMoveState implements State {
 
     }
     public void start(){
-
+        armServo.setPosition(armPosition);
     }
 
-
+    @Override
     public State update() {
         armServo.setPosition(armPosition);
         return NextState;

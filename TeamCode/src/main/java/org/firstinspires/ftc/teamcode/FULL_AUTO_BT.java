@@ -108,20 +108,13 @@ public class FULL_AUTO_BT extends OpMode
         motors.add(leftBack);
         mrrs.add(distanceSensor);
 
-
-        // Set all motors to zero power
-//        rightFront.setPower(0);
-//        leftFront.setPower(0);
-//        rightBack.setPower(0);
-//        leftBack.setPower(0);
-
         /*
         ---USING STATES---
          */
         rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
-        turnState = new GyroTurnCWByPID(270, .3, motors, imu);
+        turnState = new GyroTurnCWByPID(250, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
-        armState = new armMoveState(armServo, -1);
+        armState = new armMoveState(armServo, 1.0);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 3);
 
 
@@ -131,16 +124,8 @@ public class FULL_AUTO_BT extends OpMode
         rangeState.setNextState(turnState);
         turnState.setNextState(touchState);
         touchState.setNextState(armState);
-        armState.setNextState(null);
-        //armServo.setPosition(-1.0);
-
-        /*
-        rangeState.setNextState(turnState);
-        turnState.setNextState(touchState);
-        touchState.setNextState(armState);
         armState.setNextState(rangeState2);
         rangeState2.setNextState(null);
-        */
     }
 
 
