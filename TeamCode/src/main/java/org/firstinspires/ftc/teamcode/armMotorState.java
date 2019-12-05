@@ -16,14 +16,14 @@ author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
 DESCRIPTION: This code is used to simplify our autonomous code for our arm.
  */
-public class armMoveState implements State {
-    Servo armServo;
-    double armPosition;
+public class armMotorState implements State {
+    DcMotor armMotor;
+    double armPower;
     State NextState;
 
-    public armMoveState(Servo lock, double pos){
-        armServo = lock;
-        armPosition = pos;
+    public armMotorState(DcMotor lock, double power){
+        armMotor = lock;
+        armPower = power;
     }
 
     public void setNextState(State state) {
@@ -31,12 +31,12 @@ public class armMoveState implements State {
 
     }
     public void start(){
-        armServo.setPosition(armPosition);
+        armMotor.setPower(0.0);
     }
 
     @Override
     public State update() {
-        armServo.setPosition(armPosition);
+        armMotor.setPower(armPower);
         wait(3);
         //TimeUnit.SECONDS.sleep(1);
         return NextState;

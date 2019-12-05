@@ -28,11 +28,12 @@ public class FULL_AUTO_BT extends OpMode
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
+    DcMotor armMotor;
 
     /*
     ---SERVOS---
      */
-    Servo armServo;
+    //Servo armServo;
 
 
     /*
@@ -48,8 +49,11 @@ public class FULL_AUTO_BT extends OpMode
     distanceMoveState rangeState;
     GyroTurnCWByPID turnState;
     touchMoveState touchState;
-    armMoveState armState;
+    //armMoveState armState;
     distanceMoveState rangeState2;
+    armMotorState lockState;
+    armMotorState lockState2;
+
 
 
 
@@ -86,7 +90,8 @@ public class FULL_AUTO_BT extends OpMode
         leftFront = hardwareMap.dcMotor.get("left front");
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
-        armServo = hardwareMap.servo.get("arm motor");
+        //armServo = hardwareMap.servo.get("arm motor");
+        armMotor = hardwareMap.dcMotor.get("arm motor");
 
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
@@ -114,8 +119,10 @@ public class FULL_AUTO_BT extends OpMode
         rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
         turnState = new GyroTurnCWByPID(250, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
-        armState = new armMoveState(armServo, 1.0);
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 3);
+        //armState = new armMoveState(armServo, 1.0);
+        lockState = new armMotorState(armMotor, 0.2);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
+        lockState2 = new armMotorState(armMotor, 0.0);
 
 
         /*
@@ -123,15 +130,16 @@ public class FULL_AUTO_BT extends OpMode
          */
         rangeState.setNextState(turnState);
         turnState.setNextState(touchState);
-        touchState.setNextState(armState);
-        armState.setNextState(rangeState2);
-        rangeState2.setNextState(null);
+        touchState.setNextState(lockState);
+        lockState.setNextState(rangeState2);
+        rangeState2.setNextState(lockState2);
+        lockState2.setNextState(null);
     }
 
 
     @Override
     public void start(){
-        armServo.setPosition(0.0);
+        armMotor.setPower(0.0);
         machine = new StateMachine(rangeState);
         //machine = new StateMachine(turnState);
     }
