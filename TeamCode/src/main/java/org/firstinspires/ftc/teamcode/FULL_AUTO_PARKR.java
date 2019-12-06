@@ -91,7 +91,7 @@ public class FULL_AUTO_PARKR extends OpMode
         ts = hardwareMap.get(DigitalChannel.class, "ts");
         //imu = hardwareMap.get(BNO055IMU.class, "imu");
         //imu.initialize(parameters);
-        colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
+        colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
 
         /*
         ---MOTOR DIRECTIONS---
