@@ -142,10 +142,12 @@ public class FULL_TELEOP_1P extends OpMode {
 //            rbDrive = 1;
 //        }
 
-        float armMotorUp = gamepad2.right_trigger;
-        float armMotorDown = gamepad2.left_trigger;
-        armMotor.setPower(-armMotorDown);
-        armMotor.setPower(armMotorUp);
+        if(gamepad1.dpad_up) {
+            armMotor.setPower(0.3);
+        }
+        if(gamepad1.dpad_down) {
+            armMotor.setPower(-0.3);
+        }
 
         /*
         ---WHEEL POWERS---
