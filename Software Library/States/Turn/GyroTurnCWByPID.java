@@ -65,7 +65,7 @@ public class GyroTurnCWByPID implements StateMachine.State {
         NextState  = state;
 
     }
-    
+
     @Override
     public void start() {
 

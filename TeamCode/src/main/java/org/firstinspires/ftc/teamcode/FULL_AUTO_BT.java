@@ -14,9 +14,9 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 /*
 7890 Space Lions 2019 "FULL AUTO BLUTRAY"
-author: 7890 Software (TEAM MEMBERS)
-GOALS: (GOALS)
-DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray
+author: 7890 Software
+GOALS: Move the foundation, navigate under the bridge
+DESCRIPTION: This code is used for our autonomous when we are located on the side of with the foundation tray.
  */
 @Autonomous(name="FULL AUTO BLUTRAY", group="Iterative Opmode")
 public class FULL_AUTO_BT extends OpMode
@@ -34,8 +34,7 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---SERVOS---
      */
-    //Servo armServo;
-
+    //there are no sensors in this code
 
     /*
     ---SENSORS---
@@ -51,7 +50,6 @@ public class FULL_AUTO_BT extends OpMode
     distanceMoveState rangeState;
     GyroTurnCWByPID turnState;
     touchMoveState touchState;
-    //armMoveState armState;
     distanceMoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
@@ -60,6 +58,7 @@ public class FULL_AUTO_BT extends OpMode
 
     ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
     ArrayList<ModernRoboticsI2cRangeSensor> mrrs = new ArrayList<ModernRoboticsI2cRangeSensor>();
+
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: Andymark Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = .75;     // This is < 1.0 if geared UP
@@ -90,7 +89,6 @@ public class FULL_AUTO_BT extends OpMode
         leftFront = hardwareMap.dcMotor.get("left front");
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
-        //armServo = hardwareMap.servo.get("arm motor");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
@@ -115,16 +113,38 @@ public class FULL_AUTO_BT extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
-        turnState = new GyroTurnCWByPID(250, .3, motors, imu);
-        touchState = new touchMoveState(motors, ts);
-        //armState = new armMoveState(armServo, 1.0);
-        lockState = new armMotorState(armMotor, 0.2);
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
-        lockState2 = new armMotorState(armMotor, 0.0);
-        turnState2 = new GyroTurnCWByPID(70, .3, motors, imu);
-        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
 
+        //Moves the robot towards the wall near the tray until the we are 16 inches away.
+        //Detects the distance from the wall using a range sensor.
+        rangeState = new distanceMoveState(motors, distanceSensor, 16);
+
+        //Turns the robot around 270 degrees clockwise (which is 90 degrees ccw) so that our
+        //touch sensor is facing the foundation.
+        turnState = new GyroTurnCWByPID(250, .3, motors, imu);
+
+        //Drives until the touch sensor button is pressed by driving up against the foundation.
+        //The purpose of this is to drive up and position ourself next to the tray so we can pull it.
+        touchState = new touchMoveState(motors, ts);
+
+        //Deploys the arm motor and attaches the robot to the tray so that we can pull it back
+        //towards the building site.
+        lockState = new armMotorState(armMotor, 0.2);
+
+        //Moves our robot until we are close to the wall near the building site. Using our
+        //range sensor we can detect our distance from the wall in inches and drag the tray
+        //with us to score points in the building site.
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
+
+        //Detaches the robot from the tray so that we can leave it in the building site.
+        //Moves the armMotor upwards.
+        lockState2 = new armMotorState(armMotor, 0.0);
+
+        //Turns the robot so that we are facing the bridge.
+        turnState2 = new GyroTurnCWByPID(70, .3, motors, imu);
+
+        //Drives up towards the bridge and stops once we are directly under it. Our color
+        //sensor detects the colored tape on the ground and turns off the power in the wheels.
+        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
 
         /*
         ---ORDERING STATES---
@@ -144,27 +164,15 @@ public class FULL_AUTO_BT extends OpMode
     public void start(){
         armMotor.setPower(0.0);
         machine = new StateMachine(rangeState);
-        //machine = new StateMachine(turnState);
     }
 
 
     private StateMachine machine;
     public void loop()  {
 
-        //telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
-        //telemetry.addData("turn", rangeState.getTurn());
-        //telemetry.addData("turn", turnState.getAngle());
-
-        //telemetry.update();
         machine.update();
 
     }
-
-
-//    @Override
-//    public void stop() {
-//    }
-
 }
 
 
