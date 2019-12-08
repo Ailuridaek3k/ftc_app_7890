@@ -18,9 +18,6 @@ import org.firstinspires.ftc.teamcode.StateMachine.State; //necessary
 import java.util.ArrayList;
 
 
-
-
-
 public class GyroTurnCWByPID implements StateMachine.State {
 
     //HAS TO INPUT A NEGATIVE NO.
@@ -40,9 +37,6 @@ public class GyroTurnCWByPID implements StateMachine.State {
     double                  globalAngle, correction;
 
     double target;
-
-
-
 
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: Andymark Motor Encoder
@@ -65,20 +59,13 @@ public class GyroTurnCWByPID implements StateMachine.State {
         leftBack = motor.get(2);
         rightBack = motor.get(3);
         imu = IMU;
-        //clockwise = CLOCKWISE;
-
     }
 
     public void setNextState(State state) {
         NextState  = state;
 
     }
-
-
-
-
-
-
+    
     @Override
     public void start() {
 
@@ -177,71 +164,9 @@ public class GyroTurnCWByPID implements StateMachine.State {
 
         // rotate until turn is completed.
 
-//        if (degrees < 0)
-//        {
-//            // On right turn we have to get off zero first.
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }
-//
-//            do
-//            {
-//                power = pidRotate.performPID(getAngle()); // power will be - on right turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }
-//            } while (!pidRotate.onTarget());
-//        }
-//        else
-
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }// left turn.
         do
         {
             power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
 
             if(target < 0) {
                 leftFront.setPower(power);
@@ -262,10 +187,6 @@ public class GyroTurnCWByPID implements StateMachine.State {
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
-
-
-        // wait for rotation to stop.
-        //   wait(500);
 
         // reset angle tracking on new heading.
         resetAngle();
