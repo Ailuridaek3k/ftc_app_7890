@@ -29,7 +29,6 @@ public class FULL_TELEOP_1P extends OpMode {
     DcMotor intakeMotor;
     DcMotor lockMotor;
     Servo lock;
-    //Servo armServo;
     DcMotor armMotor;
 
     /*
@@ -57,11 +56,7 @@ public class FULL_TELEOP_1P extends OpMode {
         rightBack = hardwareMap.dcMotor.get("right back");
         liftMotor = hardwareMap.dcMotor.get("lift motor");
         intakeMotor = hardwareMap.dcMotor.get("intake motor");
-      //  lockMotor = hardwareMap.dcMotor.get("lock motor");
-        // lock = hardwareMap.servo.get("lock");
         armMotor = hardwareMap.dcMotor.get("arm motor");
-
-        //armServo = hardwareMap.servo.get("arm motor");
 
         /*
         ---DIRECTIONS---
@@ -86,8 +81,6 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---DRIVE CONTROLLER SETUP---
          */
-
-
         drive = -gamepad1.left_stick_y;
         turn = gamepad1.right_stick_x;
         strafe = -gamepad1.left_stick_x;
@@ -96,72 +89,32 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---MECANUM DRIVING CALCULATIONS---
          */
+        //We calculate the power needed to set to each wheel by using a variable for drive,
+        //turn, and strafe. By adding and subtracting these three variables against each
+        //other we can calculate the power needed for each wheel in every situation.
+
         double lfDrive = Range.clip(drive + turn - strafe, -1.0, 1.0);
         double lbDrive = Range.clip(drive + turn + strafe, -1.0, 1.0);
         double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
         double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
 
-
-//        double lfDrive = 0;
-//        double lbDrive = 0;
-//        double rfDrive = 0;
-//        double rbDrive = 0;
-//
-//        if(strafe > 0.1){
-//            lfDrive = -1;
-//            lbDrive = 1;
-//            rfDrive = 1;
-//            rbDrive = -1;
-//        }else if(strafe < -0.1) {
-//            lfDrive = 1;
-//            lbDrive = -1;
-//            rfDrive = -1;
-//            rbDrive = 1;
-//        }
-//        else if(turn > 0.1){
-//            lfDrive = 1;
-//            lbDrive = 1;
-//            rfDrive = -1;
-//            rbDrive = -1;
-//        }else if(turn < -0.1) {
-//            lfDrive = -1;
-//            lbDrive = -1;
-//            rfDrive = 1;
-//            rbDrive = 1;
-//        }
-//        else if(drive > 0.1){
-//            lfDrive = 1;
-//            lbDrive = -1;
-//            rfDrive = 1;
-//            rbDrive = -1;
-//
-//        }else if(drive < -0.1) {
-//            lfDrive = -1;
-//            lbDrive = 1;
-//            rfDrive = -1;
-//            rbDrive = 1;
-//        }
-
-        if(gamepad1.dpad_up) {
-            armMotor.setPower(0.3);
-        }
-        if(gamepad1.dpad_down) {
-            armMotor.setPower(-0.3);
-        }
-
         /*
         ---WHEEL POWERS---
          */
+        //We set the power to wheels based off the values calculated above. We can move
+        //in all directions based off of the combinations inputted by the driver.
+
         leftFront.setPower(lfDrive);
         leftBack.setPower(lbDrive);
         rightFront.setPower(rfDrive);
         rightBack.setPower(rbDrive);
 
-        //problem: left stick y strafes, left stick x turns, right stick x moves forward and back
-
         /*
         ---LIFT CONTROLLER SETUP---
          */
+        //The lift controls are on the trigger so that the driver can both move and
+        //raise + lower the lift at the same time. This allows for a more efficient tele-op.
+
         float liftControlUp = gamepad1.right_trigger;
         float liftControlDown = gamepad1.left_trigger;
         liftMotor.setPower(-liftControlDown);
@@ -170,6 +123,10 @@ public class FULL_TELEOP_1P extends OpMode {
         /*
         ---INTAKE WHEELS---
          */
+        //These intake wheels are what we use to suck the stones up into our intake
+        //mechanism. You press the button once to activate the wheels and then press
+        //the button again to switch the direction of the wheels.
+
         if(gamepad1.x && spin == 0){
             //first time around
             spin = 1; //whenever you turn it on it will do 1
@@ -183,46 +140,20 @@ public class FULL_TELEOP_1P extends OpMode {
         intakeMotor.setPower(spin);
 
 
-
-        //testing a servo
-
-//        double b = 2;
-//        if(gamepad2.x) {
-//            b = 1;
-//        }
-//        else if (gamepad2.y) {
-//            b = -1;
-//        }
-//        else if (gamepad2.a) {
-//            b = 0;
-//        }
-//        if(b == 1) {
-//            armServo.setPosition(1.0);
-//        }
-//        if (b == -1) {
-//            armServo.setPosition(-1.0);
-//        }
-//        if (b == 0) {
-//            armServo.setPosition(0.0);
-//        }
         /*
-        ---LOCKING MECHANISM---
+        ---CONTROLLING THE ARM---
          */
-//        double lockSpeed = 0.7; //a testing value for now
-//        while(gamepad1.dpad_up) {
-//            lockMotor.setPower(-lockSpeed);
-//        }
-//        while (gamepad1.dpad_down){
-//            lockMotor.setPower(lockSpeed);
-//        }
-/*
-        while(gamepad1.dpad_up) {
-            lock.setPosition(-1.0);
+        //This code gives us manual control the arm that we use to attach ourselves
+        //to the foundation. This means that we are able to reposition the tray during
+        //tele-op if needed.
+
+        if(gamepad1.dpad_up) {
+            armMotor.setPower(0.3);
         }
-        while (gamepad1.dpad_down){
-            lock.setPosition(1.0);
+        if(gamepad1.dpad_down) {
+            armMotor.setPower(-0.3);
         }
-*/
+
         /*
         ---TELEMETRY & TESTING---
          */
