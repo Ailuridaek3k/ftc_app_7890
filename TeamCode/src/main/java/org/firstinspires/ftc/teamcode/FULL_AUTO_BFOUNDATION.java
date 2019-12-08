@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 import java.util.ArrayList;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 /*
 7890 Space Lions 2019 "FULL AUTO BLUTRAY"
@@ -18,8 +15,8 @@ author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
 DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray
  */
-@Autonomous(name="FULL AUTO BLUTRAY", group="Iterative Opmode")
-public class FULL_AUTO_BT extends OpMode
+@Autonomous(name="FULL AUTO BLUFOUNDATION", group="Iterative Opmode")
+public class FULL_AUTO_BFOUNDATION extends OpMode
 {
 
     /*
@@ -43,7 +40,6 @@ public class FULL_AUTO_BT extends OpMode
     ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
-    ColorSensor colorSensor;
 
     /*
     ---STATES---
@@ -55,8 +51,10 @@ public class FULL_AUTO_BT extends OpMode
     distanceMoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
-    GyroTurnCWByPID turnState2;
-    ColorSenseStopState parkState;
+
+
+
+
 
     ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
     ArrayList<ModernRoboticsI2cRangeSensor> mrrs = new ArrayList<ModernRoboticsI2cRangeSensor>();
@@ -95,7 +93,8 @@ public class FULL_AUTO_BT extends OpMode
 
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
-        colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
+        //imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //imu.initialize(parameters);
 
         /*
         ---MOTOR DIRECTIONS---
@@ -122,8 +121,6 @@ public class FULL_AUTO_BT extends OpMode
         lockState = new armMotorState(armMotor, 0.2);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
         lockState2 = new armMotorState(armMotor, 0.0);
-        turnState2 = new GyroTurnCWByPID(70, .3, motors, imu);
-        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
 
 
         /*
@@ -134,9 +131,7 @@ public class FULL_AUTO_BT extends OpMode
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
         rangeState2.setNextState(lockState2);
-        lockState2.setNextState(turnState2);
-        turnState2.setNextState(parkState);
-        parkState.setNextState(null);
+        lockState2.setNextState(null);
     }
 
 

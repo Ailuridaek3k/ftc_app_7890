@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -42,6 +43,7 @@ public class FULL_AUTO_RT extends OpMode
     ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
+    ColorSensor colorSensor;
 
     /*
     ---STATES---
@@ -53,7 +55,8 @@ public class FULL_AUTO_RT extends OpMode
     distanceMoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
-
+    GyroTurnCWByPID turnState2;
+    ColorSenseStopState parkState;
 
 
 
@@ -92,10 +95,10 @@ public class FULL_AUTO_RT extends OpMode
         //armServo = hardwareMap.servo.get("arm motor");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
+
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
-        //imu = hardwareMap.get(BNO055IMU.class, "imu");
-        //imu.initialize(parameters);
+        colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
 
         /*
         ---MOTOR DIRECTIONS---
@@ -129,7 +132,8 @@ public class FULL_AUTO_RT extends OpMode
         lockState = new armMotorState(armMotor, 0.2);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
         lockState2 = new armMotorState(armMotor, 0.0);
-
+        turnState2 = new GyroTurnCWByPID(70, .3, motors, imu);
+        parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "forward");
 
         /*
         ---ORDERING STATES---
@@ -139,7 +143,9 @@ public class FULL_AUTO_RT extends OpMode
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
         rangeState2.setNextState(lockState2);
-        lockState2.setNextState(null);
+        lockState2.setNextState(turnState2);
+        turnState2.setNextState(parkState);
+        parkState.setNextState(null);
         //armServo.setPosition(-1.0);
 
         /*
