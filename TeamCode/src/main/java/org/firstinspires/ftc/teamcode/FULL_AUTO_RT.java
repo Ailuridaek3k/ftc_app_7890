@@ -125,14 +125,14 @@ public class FULL_AUTO_RT extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
-        turnState = new GyroTurnCWByPID(70, .3, motors, imu);
+        rangeState = new distanceMoveState(motors, distanceSensor, 12); //16 is a test value for now
+        turnState = new GyroTurnCWByPID(80, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
         //armState = new armMoveState(armServo, 1.0);
-        lockState = new armMotorState(armMotor, 0.2);
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
+        lockState = new armMotorState(armMotor, 0.3);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 9);
         lockState2 = new armMotorState(armMotor, 0.0);
-        turnState2 = new GyroTurnCWByPID(70, .3, motors, imu);
+        turnState2 = new GyroTurnCWByPID(80, .3, motors, imu);
         parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "forward");
 
         /*
@@ -142,9 +142,9 @@ public class FULL_AUTO_RT extends OpMode
         turnState.setNextState(touchState);
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
-        rangeState2.setNextState(lockState2);
-        lockState2.setNextState(turnState2);
-        turnState2.setNextState(parkState);
+        rangeState2.setNextState(turnState2);
+        turnState2.setNextState(lockState2);
+        lockState2.setNextState(parkState);
         parkState.setNextState(null);
         //armServo.setPosition(-1.0);
 
@@ -161,6 +161,17 @@ public class FULL_AUTO_RT extends OpMode
     @Override
     public void start(){
         armMotor.setPower(0.0);
+
+        leftFront.setPower(0.3);
+        leftBack.setPower(-0.3);
+        rightFront.setPower(-0.3);
+        rightBack.setPower(0.3);
+        wait(2);
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
+
         machine = new StateMachine(rangeState);
         //machine = new StateMachine(turnState);
     }
@@ -168,16 +179,24 @@ public class FULL_AUTO_RT extends OpMode
 
     private StateMachine machine;
     public void loop()  {
+// zh
 
-        //telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
-        //telemetry.addData("turn", rangeState.getTurn());
-        //telemetry.addData("turn", turnState.getAngle());
+//        telemetry.addLine("next state" + cntr);
+//        telemetry.update();
 
-        //telemetry.update();
+
         machine.update();
-
+//
+//        cntr++;
     }
 
+    public void wait(int time) {
+        try {
+            Thread.sleep(time * 1000);//milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 //    @Override
 //    public void stop() {
