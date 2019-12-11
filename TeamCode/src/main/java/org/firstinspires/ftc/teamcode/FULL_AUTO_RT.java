@@ -115,20 +115,12 @@ public class FULL_AUTO_RT extends OpMode
         motors.add(leftBack);
         mrrs.add(distanceSensor);
 
-
-        // Set all motors to zero power
-//        rightFront.setPower(0);
-//        leftFront.setPower(0);
-//        rightBack.setPower(0);
-//        leftBack.setPower(0);
-
         /*
         ---USING STATES---
          */
         rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
         turnState = new GyroTurnCWByPID(70, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
-        //armState = new armMoveState(armServo, 1.0);
         lockState = new armMotorState(armMotor, 0.2);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
         lockState2 = new armMotorState(armMotor, 0.0);
@@ -146,15 +138,6 @@ public class FULL_AUTO_RT extends OpMode
         lockState2.setNextState(turnState2);
         turnState2.setNextState(parkState);
         parkState.setNextState(null);
-        //armServo.setPosition(-1.0);
-
-        /*
-        rangeState.setNextState(turnState);
-        turnState.setNextState(touchState);
-        touchState.setNextState(armState);
-        armState.setNextState(rangeState2);
-        rangeState2.setNextState(null);
-        */
     }
 
 
@@ -169,18 +152,8 @@ public class FULL_AUTO_RT extends OpMode
     private StateMachine machine;
     public void loop()  {
 
-        //telemetry.addData("range sensor", distanceSensor.getDistance(DistanceUnit.INCH));
-        //telemetry.addData("turn", rangeState.getTurn());
-        //telemetry.addData("turn", turnState.getAngle());
-
-        //telemetry.update();
         machine.update();
 
     }
-
-
-//    @Override
-//    public void stop() {
-//    }
 
 }
