@@ -139,6 +139,16 @@ public class FULL_TELEOP_1P extends OpMode {
         }
         intakeMotor.setPower(spin);
 
+        if (spin == 1){
+            telemetry.addLine("OUT");
+            telemetry.update();
+        }else if(spin == -1){
+            telemetry.addLine("IN");
+            telemetry.update();
+        }else{
+
+        }
+
 
         /*
         ---CONTROLLING THE ARM---

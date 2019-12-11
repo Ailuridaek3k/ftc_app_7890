@@ -1,27 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.StateMachine; //necessary
-import org.firstinspires.ftc.teamcode.StateMachine.State; //necessary
+import org.firstinspires.ftc.teamcode.StateMachine.State;
+
 import java.util.ArrayList;
 
 
-
-
-
-public class GyroTurnCCWByPID implements State {
+public class TurningPIDState implements State {
 
     //HAS TO INPUT A NEGATIVE NO.
 
@@ -56,7 +47,7 @@ public class GyroTurnCCWByPID implements State {
 
     private State NextState;
 
-    public GyroTurnCCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
+    public TurningPIDState(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
 
         driveSpeed = speed;
         target =  Math.abs(angleTarget)*-1;
@@ -244,16 +235,16 @@ public class GyroTurnCCWByPID implements State {
 //                }else {
 
             if(target < 0) {
-                leftFront.setPower(power);
-                leftBack.setPower(power);
-                rightFront.setPower(-power);
-                rightBack.setPower(-power);
-            }
-            else {
                 leftFront.setPower(-power);
                 leftBack.setPower(-power);
                 rightFront.setPower(power);
                 rightBack.setPower(power);
+            }
+            else {
+                leftFront.setPower(power);
+                leftBack.setPower(power);
+                rightFront.setPower(-power);
+                rightBack.setPower(-power);
             }
         } while (!pidRotate.onTarget());
 
