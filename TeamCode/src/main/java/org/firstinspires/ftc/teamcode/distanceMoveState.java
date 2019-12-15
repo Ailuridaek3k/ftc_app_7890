@@ -23,14 +23,16 @@ public class distanceMoveState implements State{
     ModernRoboticsI2cRangeSensor distSensor;
     String turn = "null";
     boolean isMoved = false;
+    double power;
 
-    public distanceMoveState( ArrayList<DcMotor> motor, ModernRoboticsI2cRangeSensor distSense, double dist){
+    public distanceMoveState( ArrayList<DcMotor> motor, ModernRoboticsI2cRangeSensor distSense, double dist, double speed){
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
         rightBack = motor.get(3);
         distSensor = distSense;
         targetDistance = dist;
+        power  = speed;
 
 
     }
@@ -48,7 +50,7 @@ public class distanceMoveState implements State{
 
     public State update(){
         if (distSensor.getDistance(DistanceUnit.INCH) > targetDistance && !isMoved){
-            move("forward", .5);
+            move("forward", power);
             return this;
         } else if (distSensor.getDistance(DistanceUnit.INCH) <= targetDistance && !isMoved){
             isMoved = true;

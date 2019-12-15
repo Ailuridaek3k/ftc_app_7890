@@ -116,7 +116,7 @@ public class FULL_AUTO_BT extends OpMode
 
         //Moves the robot towards the wall near the tray until the we are 16 inches away.
         //Detects the distance from the wall using a range sensor.
-        rangeState = new distanceMoveState(motors, distanceSensor, 12);
+        rangeState = new distanceMoveState(motors, distanceSensor, 16);
 
         //Turns the robot around 270 degrees clockwise (which is 90 degrees ccw) so that our
         //touch sensor is facing the foundation.
@@ -128,7 +128,7 @@ public class FULL_AUTO_BT extends OpMode
 
         //Deploys the arm motor and attaches the robot to the tray so that we can pull it back
         //towards the building site.
-        lockState = new armMotorState(armMotor, 0.3);
+        lockState = new armMotorState(armMotor, -0.3);
 
         //Moves our robot until we are close to the wall near the building site. Using our
         //range sensor we can detect our distance from the wall in inches and drag the tray
