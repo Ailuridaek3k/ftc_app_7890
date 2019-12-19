@@ -129,7 +129,7 @@ public class FULL_AUTO_RT extends OpMode
         turnState = new GyroTurnCWByPID(80, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
         //armState = new armMoveState(armServo, 1.0);
-        lockState = new armMotorState(armMotor, -0.3);
+        lockState = new armMotorState(armMotor, -0.5);
         rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.3);
         lockState2 = new armMotorState(armMotor, 0.0);
         turnState2 = new GyroTurnCWByPID(80, .3, motors, imu);
