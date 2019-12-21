@@ -128,12 +128,12 @@ public class FULL_AUTO_BT extends OpMode
 
         //Deploys the arm motor and attaches the robot to the tray so that we can pull it back
         //towards the building site.
-        lockState = new armMotorState(armMotor, -0.3);
+        lockState = new armMotorState(armMotor, -0.7);
 
         //Moves our robot until we are close to the wall near the building site. Using our
         //range sensor we can detect our distance from the wall in inches and drag the tray
         //with us to score points in the building site.
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.3);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.5);
 
         //Detaches the robot from the tray so that we can leave it in the building site.
         //Moves the armMotor upwards.
@@ -149,6 +149,7 @@ public class FULL_AUTO_BT extends OpMode
         /*
         ---ORDERING STATES---
          */
+
         rangeState.setNextState(turnState);
         turnState.setNextState(touchState);
         touchState.setNextState(lockState);
@@ -181,6 +182,8 @@ public class FULL_AUTO_BT extends OpMode
 
     private StateMachine machine;
     public void loop()  {
+        telemetry.addData("angle: ", turnState2.getAngle());
+        telemetry.update();
 
         machine.update();
 
