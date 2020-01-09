@@ -11,6 +11,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import java.util.ArrayList;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /*
 7890 Space Lions 2019 "FULL AUTO BLUTRAY"
@@ -39,7 +42,8 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---SENSORS---
      */
-    ModernRoboticsI2cRangeSensor distanceSensor;
+    DistanceSensor distanceSensor;
+    //ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
     ColorSensor colorSensor;
@@ -47,10 +51,10 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---STATES---
      */
-    distanceMoveState rangeState;
+    revDistanceMoveState rangeState;
     GyroTurnCWByPID turnState;
     touchMoveState touchState;
-    distanceMoveState rangeState2;
+    revDistanceMoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
     GyroTurnCCWByPID turnState2;
@@ -91,7 +95,7 @@ public class FULL_AUTO_BT extends OpMode
         leftBack = hardwareMap.dcMotor.get("left back");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
-        distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
         colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
 
@@ -108,7 +112,7 @@ public class FULL_AUTO_BT extends OpMode
         motors.add(leftFront);
         motors.add(rightBack);
         motors.add(leftBack);
-        mrrs.add(distanceSensor);
+        //mrrs.add(distanceSensor);
 
         /*
         ---USING STATES---
@@ -116,7 +120,7 @@ public class FULL_AUTO_BT extends OpMode
 
         //Moves the robot towards the wall near the tray until the we are 16 inches away.
         //Detects the distance from the wall using a range sensor.
-        rangeState = new distanceMoveState(motors, distanceSensor, 16, 0.5);
+        rangeState = new revDistanceMoveState(motors, distanceSensor, 16, 0.5);
 
         //Turns the robot around 270 degrees clockwise (which is 90 degrees ccw) so that our
         //touch sensor is facing the foundation.
@@ -133,7 +137,7 @@ public class FULL_AUTO_BT extends OpMode
         //Moves our robot until we are close to the wall near the building site. Using our
         //range sensor we can detect our distance from the wall in inches and drag the tray
         //with us to score points in the building site.
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.5);
+        rangeState2 = new revDistanceMoveState(motors, distanceSensor, 9, 0.5);
 
         //Detaches the robot from the tray so that we can leave it in the building site.
         //Moves the armMotor upwards.
