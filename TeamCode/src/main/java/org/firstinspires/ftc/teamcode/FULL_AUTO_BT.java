@@ -144,7 +144,7 @@ public class FULL_AUTO_BT extends OpMode
         lockState2 = new armMotorState(armMotor, 0.0);
 
         //Turns the robot so that we are facing the bridge.
-        turnState2 = new GyroTurnCCWByPID(80, 0.15, motors, imu);
+        turnState2 = new GyroTurnCCWByPID(80, 0.3, motors, imu);
 
         //Drives up towards the bridge and stops once we are directly under it. Our color
         //sensor detects the colored tape on the ground and turns off the power in the wheels.
