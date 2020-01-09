@@ -24,6 +24,8 @@ public class RevColorDistanceTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
+
 //            telemetry.addData("raw ultrasonic", depotSensor.rawUltrasonic());
 //            telemetry.addData("raw optical", depotSensor.rawOptical());
 //            telemetry.addData("cm optical", "%.2f cm", depotSensor.cmOptical());

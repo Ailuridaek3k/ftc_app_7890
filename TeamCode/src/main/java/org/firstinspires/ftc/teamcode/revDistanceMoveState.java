@@ -54,6 +54,9 @@ public class revDistanceMoveState implements State{
     }
 
     public State update(){
+        move("forward", 0.3);
+        wait(3);
+
         if (distSensor.getDistance(DistanceUnit.INCH) > targetDistance && !isMoved){
             move("forward", power);
             return this;
@@ -121,6 +124,14 @@ public class revDistanceMoveState implements State{
                 leftBack.setPower(-speed);
                 rightBack.setPower(speed);
                 break;
+        }
+    }
+
+    public void wait(int time) {
+        try {
+            Thread.sleep(time * 1000);//milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
