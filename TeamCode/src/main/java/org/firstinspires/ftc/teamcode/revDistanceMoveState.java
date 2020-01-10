@@ -2,8 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.StateMachine.State;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 import java.util.ArrayList;
 
 /*
@@ -13,19 +18,19 @@ GOALS: (GOALS)
 DESCRIPTION: This code is a distance move state, used to simplify our autonomous code.
 It simply moves the robot according to the directions in our autonomous.
  */
-public class distanceMoveState implements State{
+public class revDistanceMoveState implements State{
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
     double targetDistance;
     State NextState;
-    ModernRoboticsI2cRangeSensor distSensor;
+    DistanceSensor distSensor;
     String turn = "null";
     boolean isMoved = false;
     double power;
 
-    public distanceMoveState( ArrayList<DcMotor> motor, ModernRoboticsI2cRangeSensor distSense, double dist, double speed){
+    public revDistanceMoveState(ArrayList<DcMotor> motor, DistanceSensor distSense, double dist, double speed){
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
@@ -49,6 +54,9 @@ public class distanceMoveState implements State{
     }
 
     public State update(){
+        move("forward", 0.3);
+        wait(3);
+
         if (distSensor.getDistance(DistanceUnit.INCH) > targetDistance && !isMoved){
             move("forward", power);
             return this;
@@ -116,6 +124,14 @@ public class distanceMoveState implements State{
                 leftBack.setPower(-speed);
                 rightBack.setPower(speed);
                 break;
+        }
+    }
+
+    public void wait(int time) {
+        try {
+            Thread.sleep(time * 1000);//milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

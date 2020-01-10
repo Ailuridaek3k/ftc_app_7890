@@ -114,12 +114,12 @@ public class FULL_AUTO_BFOUNDATION extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, distanceSensor, 16); //16 is a test value for now
+        rangeState = new distanceMoveState(motors, distanceSensor, 16, 0.5); //16 is a test value for now
         turnState = new GyroTurnCWByPID(250, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
         //armState = new armMoveState(armServo, 1.0);
         lockState = new armMotorState(armMotor, 0.2);
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 7);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 7, 0.3);
         lockState2 = new armMotorState(armMotor, 0.0);
 
 

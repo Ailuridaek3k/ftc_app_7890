@@ -116,11 +116,12 @@ public class FULL_AUTO_RT extends OpMode
         /*
         ---USING STATES---
          */
-        rangeState = new distanceMoveState(motors, distanceSensor, 12); //16 is a test value for now
+        rangeState = new distanceMoveState(motors, distanceSensor, 16, 0.5); //16 is a test value for now
         turnState = new GyroTurnCWByPID(80, .3, motors, imu);
         touchState = new touchMoveState(motors, ts);
-        lockState = new armMotorState(armMotor, 0.3);
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 9);
+        //armState = new armMoveState(armServo, 1.0);
+        lockState = new armMotorState(armMotor, -0.5);
+        rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.3);
         lockState2 = new armMotorState(armMotor, 0.0);
         turnState2 = new GyroTurnCWByPID(80, .3, motors, imu);
         parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "forward");

@@ -21,17 +21,17 @@ import java.util.ArrayList;
 
 
 
-public class GyroTurnCCWByPID implements State {
+@Autonomous(name="imu test", group="Iterative Opmode")
+public class IMUTest extends OpMode
+{
 
     //HAS TO INPUT A NEGATIVE NO.
+
 
     boolean running = true;
     boolean clockwise;
     double angle;
-    DcMotor leftFront;
-    DcMotor rightFront;
-    DcMotor leftBack;
-    DcMotor rightBack;
+
     BNO055IMU imu;
     Orientation             lastAngles = new Orientation();
 
@@ -54,28 +54,18 @@ public class GyroTurnCCWByPID implements State {
     static final double TURN_SPEED = 0.5;
 
 
-    private State NextState;
+    public void init() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-    public GyroTurnCCWByPID(double angleTarget, double speed, ArrayList<DcMotor> motor, BNO055IMU IMU){
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
 
-        driveSpeed = speed;
-        target =  Math.abs(angleTarget);
-        leftFront = motor.get(0);
-        rightFront = motor.get(1);
-        leftBack = motor.get(2);
-        rightBack = motor.get(3);
-        imu = IMU;
-        //clockwise = CLOCKWISE;
+        imu = hardwareMap.get(BNO055IMU.class, "imu"); // lmao hardware what a joke
 
+        imu.initialize(parameters);
     }
-
-    public void setNextState(State state) {
-        NextState  = state;
-
-    }
-
-
-
 
 
 
@@ -84,25 +74,14 @@ public class GyroTurnCCWByPID implements State {
 
         pidRotate = new PIDController(.025, 0, 0);
 
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
     }
 
-    @Override
-    public State update() {
+    public void loop() {
 
-        rotate((int)target, driveSpeed);
-        return NextState;
-
+        telemetry.addData("angle", getAngle());
+        telemetry.update();
 
     }
 
@@ -145,65 +124,6 @@ public class GyroTurnCCWByPID implements State {
         else //if(!clockwise ==)
             return globalAngle;
     }
-
-    /**
-     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
-     * @param degrees Degrees to turn, + is left - is right
-     */
-    private void rotate(int degrees, double power)
-    {
-        // restart imu angle tracking.
-        resetAngle();
-
-        // start pid controller. PID controller will monitor the turn angle with respect to the
-        // target angle and reduce power as we approach the target angle with a minimum of 20%.
-        // This is to prevent the robots momentum from overshooting the turn after we turn off the
-        // power. The PID controller reports onTarget() = true when the difference between turn
-        // angle and target angle is within 2% of target (tolerance). This helps prevent overshoot.
-        // The minimum power is determined by testing and must enough to prevent motor stall and
-        // complete the turn. Note: if the gap between the starting power and the stall (minimum)
-        // power is small, overshoot may still occur. Overshoot is dependant on the motor and
-        // gearing configuration, starting power, weight of the robot and the on target tolerance.
-
-        pidRotate.reset();
-        pidRotate.setSetpoint(degrees);
-        pidRotate.setInputRange(0, 359);
-        pidRotate.setOutputRange(.20, power);
-        pidRotate.setTolerance(2);
-        pidRotate.enable();
-
-        do
-        {
-            power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-
-            if(target < 0) {
-                leftFront.setPower(power);
-                leftBack.setPower(power);
-                rightFront.setPower(-power);
-                rightBack.setPower(-power);
-            }
-            else {
-                leftFront.setPower(-power);
-                leftBack.setPower(-power);
-                rightFront.setPower(power);
-                rightBack.setPower(power);
-            }
-        } while (!pidRotate.onTarget());
-
-        // turn the motors off.
-        leftFront.setPower(0);
-        leftBack.setPower(0);
-        rightFront.setPower(0);
-        rightBack.setPower(0);
-
-
-        // wait for rotation to stop.
-        //   wait(500);
-
-        // reset angle tracking on new heading.
-        resetAngle();
-    }
-
 
     public void wait(int time) {
         try {
@@ -287,7 +207,7 @@ public class GyroTurnCCWByPID implements State {
                 // Set the current error to the previous error for the next cycle.
                 m_prevError = m_error;
 
-                if (m_result < 0) sign = 1;    // Record sign of result.
+                if (m_result < 0) sign = -1;    // Record sign of result.
 
                 // Make sure the final result is within bounds. If we constrain the result, we make
                 // sure the sign of the constrained result matches the original result sign.
