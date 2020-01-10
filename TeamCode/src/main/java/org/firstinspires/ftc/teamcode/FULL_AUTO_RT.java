@@ -51,7 +51,6 @@ public class FULL_AUTO_RT extends OpMode
     distanceMoveState rangeState;
     GyroTurnCWByPID turnState;
     touchMoveState touchState;
-    //armMoveState armState;
     distanceMoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
@@ -92,7 +91,6 @@ public class FULL_AUTO_RT extends OpMode
         leftFront = hardwareMap.dcMotor.get("left front");
         rightBack = hardwareMap.dcMotor.get("right back");
         leftBack = hardwareMap.dcMotor.get("left back");
-        //armServo = hardwareMap.servo.get("arm motor");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
 
@@ -156,7 +154,6 @@ public class FULL_AUTO_RT extends OpMode
         rightBack.setPower(0);
 
         machine = new StateMachine(rangeState);
-        //machine = new StateMachine(turnState);
     }
 
 
@@ -165,8 +162,6 @@ public class FULL_AUTO_RT extends OpMode
 
 
         machine.update();
-//
-//        cntr++;
     }
 
     public void wait(int time) {
@@ -176,9 +171,5 @@ public class FULL_AUTO_RT extends OpMode
             e.printStackTrace();
         }
     }
-
-//    @Override
-//    public void stop() {
-//    }
 
 }
