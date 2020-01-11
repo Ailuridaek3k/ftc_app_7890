@@ -1,19 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import java.util.ArrayList;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import java.util.ArrayList;
 
 /*
 7890 Space Lions 2019 "FULL AUTO BLUTRAY"
@@ -21,8 +17,8 @@ author: 7890 Software
 GOALS: Move the foundation, navigate under the bridge
 DESCRIPTION: This code is used for our autonomous when we are located on the side of with the foundation tray.
  */
-@Autonomous(name="FULL AUTO BLUTRAY", group="Iterative Opmode")
-public class FULL_AUTO_BT extends OpMode
+@Autonomous(name="FULL AUTO BLUTRAY HARD", group="Iterative Opmode")
+public class BT_HARDCODE extends OpMode
 {
 
     /*
@@ -42,7 +38,8 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---SENSORS---
      */
-    ModernRoboticsI2cRangeSensor distanceSensor;
+    DistanceSensor distanceSensor;
+    //ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
     ColorSensor colorSensor;
@@ -50,10 +47,10 @@ public class FULL_AUTO_BT extends OpMode
     /*
     ---STATES---
      */
-    distanceMoveState rangeState;
+    MoveState rangeState;
     GyroTurnCWByPID turnState;
     touchMoveState touchState;
-    distanceMoveState rangeState2;
+    MoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
     GyroTurnCCWByPID turnState2;
@@ -94,7 +91,7 @@ public class FULL_AUTO_BT extends OpMode
         leftBack = hardwareMap.dcMotor.get("left back");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
-        distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
         colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
 
@@ -111,7 +108,7 @@ public class FULL_AUTO_BT extends OpMode
         motors.add(leftFront);
         motors.add(rightBack);
         motors.add(leftBack);
-        mrrs.add(distanceSensor);
+        //mrrs.add(distanceSensor);
 
         /*
         ---USING STATES---
@@ -119,11 +116,11 @@ public class FULL_AUTO_BT extends OpMode
 
         //Moves the robot towards the wall near the tray until the we are 16 inches away.
         //Detects the distance from the wall using a range sensor.
-        rangeState = new distanceMoveState(motors, distanceSensor, 16, 0.5);
+        rangeState = new MoveState(motors, 2000, 0.5);
 
         //Turns the robot around 270 degrees clockwise (which is 90 degrees ccw) so that our
         //touch sensor is facing the foundation.
-        turnState = new GyroTurnCWByPID(260, .3, motors, imu);
+        turnState = new GyroTurnCWByPID(250, .3, motors, imu);
 
         //Drives until the touch sensor button is pressed by driving up against the foundation.
         //The purpose of this is to drive up and position ourself next to the tray so we can pull it.
@@ -136,18 +133,15 @@ public class FULL_AUTO_BT extends OpMode
         //Moves our robot until we are close to the wall near the building site. Using our
         //range sensor we can detect our distance from the wall in inches and drag the tray
         //with us to score points in the building site.
-        rangeState2 = new distanceMoveState(motors, distanceSensor, 9, 0.5);
+        rangeState2 = new MoveState(motors, 3000, 0.5);
 
         //Detaches the robot from the tray so that we can leave it in the building site.
         //Moves the armMotor upwards.
         lockState2 = new armMotorState(armMotor, 0.0);
 
-        //Turns the robot so that we are facing the bridge.
-        turnState2 = new GyroTurnCCWByPID(80, 0.3, motors, imu);
-
         //Drives up towards the bridge and stops once we are directly under it. Our color
         //sensor detects the colored tape on the ground and turns off the power in the wheels.
-        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "forward");
+        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "left");
 
         /*
         ---ORDERING STATES---
@@ -157,10 +151,8 @@ public class FULL_AUTO_BT extends OpMode
         turnState.setNextState(touchState);
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
-        rangeState2.setNextState(turnState2);
-        turnState2.setNextState(lockState2);
+        rangeState2.setNextState(lockState2);
         lockState2.setNextState(parkState);
-
         parkState.setNextState(null);
     }
 

@@ -37,7 +37,7 @@ public class armMotorState implements State {
     @Override
     public State update() {
         armMotor.setPower(armPower);
-        wait(3);
+        wait(1);
         //TimeUnit.SECONDS.sleep(1);
         return NextState;
 
@@ -45,7 +45,7 @@ public class armMotorState implements State {
 
     public void wait(int time) {
         try {
-            Thread.sleep(time * 1000);//milliseconds
+            Thread.sleep(time * 100);//milliseconds
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
