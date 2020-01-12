@@ -81,7 +81,7 @@ public class FULL_AUTO_BT extends OpMode
             parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
             parameters.loggingEnabled      = false;
 
-            imu = hardwareMap.get(BNO055IMU.class, "imu"); // lmao hardware what a joke
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
 
             imu.initialize(parameters);
 
@@ -160,7 +160,6 @@ public class FULL_AUTO_BT extends OpMode
         rangeState2.setNextState(turnState2);
         turnState2.setNextState(lockState2);
         lockState2.setNextState(parkState);
-
         parkState.setNextState(null);
     }
 
@@ -168,7 +167,6 @@ public class FULL_AUTO_BT extends OpMode
     @Override
     public void start(){
         armMotor.setPower(0.0);
-
         leftFront.setPower(-0.3);
         leftBack.setPower(0.3);
         rightFront.setPower(0.3);
