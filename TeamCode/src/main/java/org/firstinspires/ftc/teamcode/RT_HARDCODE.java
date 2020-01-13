@@ -53,7 +53,7 @@ public class RT_HARDCODE extends OpMode
     MoveState rangeState2;
     armMotorState lockState;
     armMotorState lockState2;
-    GyroTurnCCWByPID turnState2;
+    GyroTurnCWByPID turnState2;
     ColorSenseStopState parkState;
 
     ArrayList<DcMotor> motors = new ArrayList<DcMotor>();
@@ -71,16 +71,16 @@ public class RT_HARDCODE extends OpMode
 
     public void init() {
 
-         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-            parameters.mode                = BNO055IMU.SensorMode.IMU;
-            parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-            parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            parameters.loggingEnabled      = false;
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
 
-            imu = hardwareMap.get(BNO055IMU.class, "imu"); // lmao hardware what a joke
+        imu = hardwareMap.get(BNO055IMU.class, "imu"); // lmao hardware what a joke
 
-            imu.initialize(parameters);
+        imu.initialize(parameters);
 
         /*
         ---HARDWARE MAP---
@@ -128,12 +128,12 @@ public class RT_HARDCODE extends OpMode
 
         //Deploys the arm motor and attaches the robot to the tray so that we can pull it back
         //towards the building site.
-        lockState = new armMotorState(armMotor, -0.5);
+        lockState = new armMotorState(armMotor, -0.7);
 
         //Moves our robot until we are close to the wall near the building site. Using our
         //range sensor we can detect our distance from the wall in inches and drag the tray
         //with us to score points in the building site.
-        rangeState2 = new MoveState(motors, 3000, 0.3);
+        rangeState2 = new MoveState(motors, 3000, 0.5);
 
         //Moves the armMotor upwards.
         lockState2 = new armMotorState(armMotor, 0.0);
@@ -151,8 +151,8 @@ public class RT_HARDCODE extends OpMode
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
         rangeState2.setNextState(lockState2);
-        lockState2.setNextState(parkState);
-        parkState.setNextState(null);
+        lockState2.setNextState(null);
+        //parkState.setNextState(null);
     }
 
 
@@ -160,10 +160,10 @@ public class RT_HARDCODE extends OpMode
     public void start(){
         armMotor.setPower(0.0);
 
-        leftFront.setPower(-0.3);
-        leftBack.setPower(0.3);
-        rightFront.setPower(0.3);
-        rightBack.setPower(-0.3);
+        leftFront.setPower(0.3);
+        leftBack.setPower(-0.3);
+        rightFront.setPower(-0.3);
+        rightBack.setPower(0.3);
         wait(2);
         leftFront.setPower(0);
         leftBack.setPower(0);
@@ -176,7 +176,7 @@ public class RT_HARDCODE extends OpMode
 
     private StateMachine machine;
     public void loop()  {
-        telemetry.addData("angle: ", turnState2.getAngle());
+        //telemetry.addData("angle: ", turnState2.getAngle());
         telemetry.update();
 
         machine.update();

@@ -47,6 +47,18 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(pow);
                 rightFront.setPower(pow);
             }
+            else if (dir.equals("right")) {//robot strafes right
+                leftFront.setPower(pow);
+                rightFront.setPower(-pow);
+                leftBack.setPower(-pow);
+                rightBack.setPower(pow);
+            }
+            else if(dir.equals("left")) {
+                leftFront.setPower(-pow);
+                rightFront.setPower(pow);
+                leftBack.setPower(pow);
+                rightBack.setPower(-pow);
+            }
 
             if(/*cs1.red()> 1000 && */cs1.red()>cs1.blue() && cs1.red()>cs1.green()){
                 leftBack.setPower(0);
@@ -70,6 +82,18 @@ public class ColorSenseStopState implements State {
                 leftFront.setPower(pow);
                 rightBack.setPower(pow);
                 rightFront.setPower(pow);
+            }
+            else if (dir.equals("right")) {//robot strafes right
+                leftFront.setPower(pow);
+                rightFront.setPower(-pow);
+                leftBack.setPower(-pow);
+                rightBack.setPower(pow);
+            }
+            else if(dir.equals("left")) {
+                leftFront.setPower(-pow);
+                rightFront.setPower(pow);
+                leftBack.setPower(pow);
+                rightBack.setPower(-pow);
             }
 
             if(/*cs1.blue()> 1000 &&*/ cs1.blue()>cs1.red() && cs1.blue()>cs1.green()){

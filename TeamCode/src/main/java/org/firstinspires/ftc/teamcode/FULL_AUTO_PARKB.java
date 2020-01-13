@@ -42,7 +42,7 @@ public class FULL_AUTO_PARKB extends OpMode
     /*
     ---SENSORS---
      */
-    ModernRoboticsI2cRangeSensor distanceSensor;
+    //ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
     ColorSensor colorSensor;
@@ -91,7 +91,7 @@ public class FULL_AUTO_PARKB extends OpMode
         //armServo = hardwareMap.servo.get("arm motor");
         armMotor = hardwareMap.dcMotor.get("arm motor");
 
-        distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
+        //distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
         //imu = hardwareMap.get(BNO055IMU.class, "imu");
         //imu.initialize(parameters);
@@ -110,7 +110,7 @@ public class FULL_AUTO_PARKB extends OpMode
         motors.add(leftFront);
         motors.add(rightBack);
         motors.add(leftBack);
-        mrrs.add(distanceSensor);
+        //mrrs.add(distanceSensor);
 
         /*
         ---USING STATES---

@@ -152,8 +152,8 @@ public class BT_HARDCODE extends OpMode
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
         rangeState2.setNextState(lockState2);
-        lockState2.setNextState(parkState);
-        parkState.setNextState(null);
+        lockState2.setNextState(null);
+        //parkState.setNextState(null);
     }
 
 
@@ -177,7 +177,7 @@ public class BT_HARDCODE extends OpMode
 
     private StateMachine machine;
     public void loop()  {
-        telemetry.addData("angle: ", turnState2.getAngle());
+        //telemetry.addData("angle: ", turnState2.getAngle());
         telemetry.update();
 
         machine.update();
