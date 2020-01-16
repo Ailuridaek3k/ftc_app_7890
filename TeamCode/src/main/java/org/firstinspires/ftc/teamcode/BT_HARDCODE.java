@@ -17,7 +17,7 @@ author: 7890 Software
 GOALS: Move the foundation, navigate under the bridge
 DESCRIPTION: This code is used for our autonomous when we are located on the side of with the foundation tray.
  */
-@Autonomous(name="FULL AUTO BLUTRAY HARD", group="Iterative Opmode")
+@Autonomous(name="FULL AUTO BLUTRAY HARD v2", group="Iterative Opmode")
 public class BT_HARDCODE extends OpMode
 {
 
@@ -152,8 +152,8 @@ public class BT_HARDCODE extends OpMode
         touchState.setNextState(lockState);
         lockState.setNextState(rangeState2);
         rangeState2.setNextState(lockState2);
-        lockState2.setNextState(null);
-        //parkState.setNextState(null);
+        lockState2.setNextState(parkState);
+        parkState.setNextState(null);
     }
 
 
