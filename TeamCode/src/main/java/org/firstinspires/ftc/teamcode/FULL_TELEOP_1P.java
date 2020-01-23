@@ -161,7 +161,7 @@ public class FULL_TELEOP_1P extends OpMode {
             armMotor.setPower(0.3);
         }
         if(gamepad1.dpad_down) {
-            armMotor.setPower(-0.3);
+            armMotor.setPower(-0.5);
         }
 
         /*

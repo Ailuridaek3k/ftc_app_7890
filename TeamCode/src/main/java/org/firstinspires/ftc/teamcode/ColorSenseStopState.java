@@ -104,6 +104,118 @@ public class ColorSenseStopState implements State {
                 return NextState;
             }
 
+
+            return this;
+        }
+        else if(cval.equals("yellow")){
+            if(dir.equals("forward")){
+                leftBack.setPower(-pow);
+                leftFront.setPower(-pow);
+                rightBack.setPower(-pow);
+                rightFront.setPower(-pow);
+            }
+            else if(dir.equals("backward")){
+                leftBack.setPower(pow);
+                leftFront.setPower(pow);
+                rightBack.setPower(pow);
+                rightFront.setPower(pow);
+            }
+            else if (dir.equals("right")) {//robot strafes right
+                leftFront.setPower(pow);
+                rightFront.setPower(-pow);
+                leftBack.setPower(-pow);
+                rightBack.setPower(pow);
+            }
+            else if(dir.equals("left")) {
+                leftFront.setPower(-pow);
+                rightFront.setPower(pow);
+                leftBack.setPower(pow);
+                rightBack.setPower(-pow);
+            }
+
+            if(/*cs1.blue()> 1000 &&*/ cs1.blue()<cs1.red() && cs1.blue()<cs1.green()){
+                leftBack.setPower(0);
+                leftFront.setPower(0);
+                rightBack.setPower(0);
+                rightFront.setPower(0);
+                return NextState;
+            }
+
+
+            return this;
+        }
+        else if(cval.equals("black")){
+            if(dir.equals("forward")){
+                leftBack.setPower(-pow);
+                leftFront.setPower(-pow);
+                rightBack.setPower(-pow);
+                rightFront.setPower(-pow);
+            }
+            else if(dir.equals("backward")){
+                leftBack.setPower(pow);
+                leftFront.setPower(pow);
+                rightBack.setPower(pow);
+                rightFront.setPower(pow);
+            }
+            else if (dir.equals("right")) {//robot strafes right
+                leftFront.setPower(pow);
+                rightFront.setPower(-pow);
+                leftBack.setPower(-pow);
+                rightBack.setPower(pow);
+            }
+            else if(dir.equals("left")) {
+                leftFront.setPower(-pow);
+                rightFront.setPower(pow);
+                leftBack.setPower(pow);
+                rightBack.setPower(-pow);
+            }
+
+            if(/*cs1.blue()> 1000 &&*/ cs1.blue()<100 && cs1.green()<100 && cs1.red()<100){
+                leftBack.setPower(0);
+                leftFront.setPower(0);
+                rightBack.setPower(0);
+                rightFront.setPower(0);
+                return NextState;
+            }
+
+
+            return this;
+        }
+        else if(cval.equals("black and yellow")){
+            if(dir.equals("forward")){
+                leftBack.setPower(-pow);
+                leftFront.setPower(-pow);
+                rightBack.setPower(-pow);
+                rightFront.setPower(-pow);
+            }
+            else if(dir.equals("backward")){
+                leftBack.setPower(pow);
+                leftFront.setPower(pow);
+                rightBack.setPower(pow);
+                rightFront.setPower(pow);
+            }
+            else if (dir.equals("right")) {//robot strafes right
+                leftFront.setPower(pow);
+                rightFront.setPower(-pow);
+                leftBack.setPower(-pow);
+                rightBack.setPower(pow);
+            }
+            else if(dir.equals("left")) {
+                leftFront.setPower(-pow);
+                rightFront.setPower(pow);
+                leftBack.setPower(pow);
+                rightBack.setPower(-pow);
+            }
+
+            if((cs1.blue()<cs1.red() && cs1.blue()<cs1.green()) || (cs1.blue()<100 && cs1.green()<100 && cs1.red()<100)){
+                leftBack.setPower(0);
+                leftFront.setPower(0);
+                rightBack.setPower(0);
+                rightFront.setPower(0);
+                return NextState;
+            }
+
+
             return this;
         }
 
