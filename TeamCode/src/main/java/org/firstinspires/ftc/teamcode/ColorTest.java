@@ -38,11 +38,13 @@ public class ColorTest extends LinearOpMode{
     private ElapsedTime     runtime = new ElapsedTime();
 
     ColorSensor depotSensor;
+    ColorSensor stoneSensor;
 
     public void runOpMode() {
         depotSensor = hardwareMap.get(ColorSensor.class, "color sensor");
+        stoneSensor = hardwareMap.get(ColorSensor.class, "stone sensor");
 
-        waitForStart();
+                waitForStart();
 
         while(opModeIsActive()) {
             if (depotSensor.red() > depotSensor.blue() && depotSensor.red() > depotSensor.green()) {
@@ -57,6 +59,9 @@ public class ColorTest extends LinearOpMode{
                 telemetry.addData("color: ", "nothing");
                 telemetry.update();
             }
+            telemetry.addData("blue ", depotSensor.blue());
+            telemetry.addData("red ", depotSensor.red());
+            telemetry.addData("green ", depotSensor.green());
         }
 
     }
