@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import java.util.ArrayList;
+
 import org.firstinspires.ftc.teamcode.StateMachine.State;
 
-public class ColorSenseStopState implements State {
+import java.util.ArrayList;
+
+public class ColorSenseMoveState implements State {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -16,7 +18,7 @@ public class ColorSenseStopState implements State {
     String dir;
     double pow;
     int red;
-    public ColorSenseStopState(ArrayList<DcMotor> motor, ColorSensor colorSensor, String color, double power, String direction){
+    public ColorSenseMoveState(ArrayList<DcMotor> motor, ColorSensor colorSensor, String color, double power, String direction){
         leftFront = motor.get(0);
         rightFront = motor.get(1);
         leftBack = motor.get(2);
@@ -60,7 +62,7 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(-pow);
             }
 
-            if(/*cs1.red()> 1000 && */cs1.red()>cs1.blue() && cs1.red()>cs1.green()){
+            if(/*cs1.red()> 1000 && */!(cs1.red()>cs1.blue() && cs1.red()>cs1.green())){
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);
@@ -96,7 +98,7 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(-pow);
             }
 
-            if(/*cs1.blue()> 1000 &&*/ cs1.blue()>cs1.red() && cs1.blue()>cs1.green()){
+            if(/*cs1.blue()> 1000 &&*/ !(cs1.blue()>cs1.red() && cs1.blue()>cs1.green())){
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);
@@ -133,7 +135,7 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(-pow);
             }
 
-            if(/*cs1.blue()> 1000 &&*/ cs1.blue()<cs1.red() && cs1.blue()<cs1.green()){
+            if(/*cs1.blue()> 1000 &&*/ !(cs1.blue()<cs1.red() && cs1.blue()<cs1.green())){
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);
@@ -170,7 +172,7 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(-pow);
             }
 
-            if(/*cs1.blue()> 1000 &&*/ cs1.blue()<100 && cs1.green()<100 && cs1.red()<100){
+            if(/*cs1.blue()> 1000 &&*/ !(cs1.blue()<100 && cs1.green()<100 && cs1.red()<100)){
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);
@@ -207,7 +209,7 @@ public class ColorSenseStopState implements State {
                 rightBack.setPower(-pow);
             }
 
-            if((cs1.blue()<cs1.red() && cs1.blue()<cs1.green() && cs1.green()>50 && cs1.red()>50) || (cs1.blue()>50 && cs1.green()>50 && cs1.red()>50)){
+            if(!((cs1.blue()<cs1.red() && cs1.blue()<cs1.green()) || (cs1.blue()>50 && cs1.green()>50 && cs1.red()>50))){
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);

@@ -16,7 +16,7 @@ author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
 DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray
  */
-@Autonomous(name="FULL AUTO PARKRED", group="Iterative Opmode")
+@Autonomous(name="FULL AUTO RSTONE", group="Iterative Opmode")
 public class FULL_AUTO_RSTONE extends OpMode
 {
 
@@ -45,15 +45,17 @@ public class FULL_AUTO_RSTONE extends OpMode
     ModernRoboticsI2cRangeSensor distanceSensor;
     ColorSensor stoneSensor;
 
+
     /*
     ---STATES---
      */
     ColorSenseStopState initialMoveState;
     ColorSenseStopState stoneState;
     armMotorState armState;
-    distanceMoveState moveState;
+    MoveState moveState;
+    //distanceMoveState moveState;
     GyroTurnCWByPID turnState;
-    ColorSenseStopState parkState;
+    ColorSenseMoveState parkState;
 
 
 
@@ -95,8 +97,8 @@ public class FULL_AUTO_RSTONE extends OpMode
 
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
-        colorSensor = hardwareMap.get(ColorSensor.class, "stone sensor");
-
+        colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
+        stoneSensor = hardwareMap.get(ColorSensor.class, "stone sensor");
 
         /*
         ---MOTOR DIRECTIONS---
@@ -116,12 +118,13 @@ public class FULL_AUTO_RSTONE extends OpMode
         /*
         ---USING STATES---
          */
-        initialMoveState = new ColorSenseStopState(motors, colorSensor, "black and yellow", 0.5, "forward");
-        stoneState = new ColorSenseStopState(motors, colorSensor, "black", 0.5, "left");
+        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.5, "backward");
+        stoneState = new ColorSenseStopState(motors, stoneSensor, "black", 0.5, "right");
         armState = new armMotorState(armMotor, -0.3);
-        moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
+        moveState = new MoveState(motors, 3, 0.5);
+        //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
         turnState = new GyroTurnCWByPID(80, .3, motors, imu);
-        parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "backward");
+        parkState = new ColorSenseMoveState(motors, colorSensor, "red", 0.5, "backward");
 
 
         /*

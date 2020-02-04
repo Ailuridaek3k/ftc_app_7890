@@ -59,9 +59,9 @@ public class ColorTest extends LinearOpMode{
                 telemetry.addData("color: ", "nothing");
                 telemetry.update();
             }
-            telemetry.addData("blue ", depotSensor.blue());
-            telemetry.addData("red ", depotSensor.red());
-            telemetry.addData("green ", depotSensor.green());
+            telemetry.addData("blue ", stoneSensor.blue());
+            telemetry.addData("red ", stoneSensor.red());
+            telemetry.addData("green ", stoneSensor.green());
         }
 
     }
