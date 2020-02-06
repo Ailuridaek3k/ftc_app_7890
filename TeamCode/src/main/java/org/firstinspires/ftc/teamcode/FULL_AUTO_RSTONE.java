@@ -50,7 +50,7 @@ public class FULL_AUTO_RSTONE extends OpMode
     ---STATES---
      */
     ColorSenseStopState initialMoveState;
-    ColorSenseStopState stoneState;
+    ColorSenseMoveState stoneState;
     armMotorState armState;
     MoveState moveState;
     //distanceMoveState moveState;
@@ -118,9 +118,9 @@ public class FULL_AUTO_RSTONE extends OpMode
         /*
         ---USING STATES---
          */
-        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.5, "backward");
-        stoneState = new ColorSenseStopState(motors, stoneSensor, "black", 0.5, "right");
-        armState = new armMotorState(armMotor, -0.3);
+        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.3, "backward");
+        stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "right");
+        armState = new armMotorState(armMotor, -0.7);
         moveState = new MoveState(motors, 3, 0.5);
         //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
         turnState = new GyroTurnCWByPID(80, .3, motors, imu);
@@ -149,6 +149,7 @@ public class FULL_AUTO_RSTONE extends OpMode
 
     private StateMachine machine;
     public void loop()  {
+
 
         machine.update();
 
