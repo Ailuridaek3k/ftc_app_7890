@@ -136,6 +136,7 @@ public class ColorSenseMoveState implements State {
             }
 
             if(/*cs1.blue()> 1000 &&*/ !(cs1.blue()<cs1.red() && cs1.blue()<cs1.green())){
+                //wait(100); //hardcode for now while waiting sensors to come
                 leftBack.setPower(0);
                 leftFront.setPower(0);
                 rightBack.setPower(0);
@@ -234,4 +235,13 @@ public class ColorSenseMoveState implements State {
     public void start() {
 
     }
+
+    public void wait(int time) {
+        try {
+            Thread.sleep(time);//milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

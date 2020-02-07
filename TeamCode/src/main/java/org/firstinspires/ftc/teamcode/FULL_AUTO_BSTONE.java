@@ -16,8 +16,8 @@ author: 7890 Software (TEAM MEMBERS)
 GOALS: (GOALS)
 DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray
  */
-@Autonomous(name="FULL AUTO RSTONE", group="Iterative Opmode")
-public class FULL_AUTO_RSTONE extends OpMode
+@Autonomous(name="FULL AUTO BSTONE", group="Iterative Opmode")
+public class FULL_AUTO_BSTONE extends OpMode
 {
 
     /*
@@ -54,11 +54,8 @@ public class FULL_AUTO_RSTONE extends OpMode
     armMotorState armState;
     MoveState moveState;
     //distanceMoveState moveState;
-    GyroTurnCWByPID turnState;
+    GyroTurnCCWByPID turnState;
     ColorSenseStopState parkState;
-    MoveState moveState2;
-    armMotorState releaseState;
-    ColorSenseStopState parkState2;
 
 
 
@@ -121,16 +118,14 @@ public class FULL_AUTO_RSTONE extends OpMode
         /*
         ---USING STATES---
          */
-        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.3, "backward");
-        stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "right");
+        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.2, "backward");
+        stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "left");
         armState = new armMotorState(armMotor, -0.3);
         moveState = new MoveState(motors, 750, 0.5);
         //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
-        turnState = new GyroTurnCWByPID(70, .3, motors, imu);
-        parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "backward");
-        moveState2 = new MoveState(motors, 700, -0.5);
-        releaseState = new armMotorState(armMotor, 0.3);
-        parkState2 = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "forward");
+        turnState = new GyroTurnCCWByPID(70, .3, motors, imu);
+        parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
+
 
         /*
         ---ORDERING STATES---
@@ -140,10 +135,7 @@ public class FULL_AUTO_RSTONE extends OpMode
         armState.setNextState(moveState);
         moveState.setNextState(turnState);
         turnState.setNextState(parkState);
-        parkState.setNextState(moveState2);
-        moveState2.setNextState(releaseState);
-        releaseState.setNextState(parkState2);
-        parkState2.setNextState(null);
+        parkState.setNextState(null);
 
     }
 
