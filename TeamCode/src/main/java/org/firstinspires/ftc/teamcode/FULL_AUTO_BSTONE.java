@@ -56,6 +56,10 @@ public class FULL_AUTO_BSTONE extends OpMode
     //distanceMoveState moveState;
     GyroTurnCCWByPID turnState;
     ColorSenseStopState parkState;
+    MoveState moveState2;
+    MoveState stopState;
+    armMotorState releaseState;
+    ColorSenseStopState parkState2;
 
 
 
@@ -121,11 +125,14 @@ public class FULL_AUTO_BSTONE extends OpMode
         initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.2, "backward");
         stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "left");
         armState = new armMotorState(armMotor, -0.3);
-        moveState = new MoveState(motors, 750, 0.5);
+        moveState = new MoveState(motors, 750, 0.3);
         //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
-        turnState = new GyroTurnCCWByPID(70, .3, motors, imu);
+        turnState = new GyroTurnCCWByPID(70, 0.3, motors, imu);
         parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
-
+        moveState2 = new MoveState(motors, 100, -0.5);
+        stopState = new MoveState(motors, 300, 0.0);
+        releaseState = new armMotorState(armMotor, 0.3);
+        parkState2 = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "forward");
 
         /*
         ---ORDERING STATES---
@@ -135,7 +142,11 @@ public class FULL_AUTO_BSTONE extends OpMode
         armState.setNextState(moveState);
         moveState.setNextState(turnState);
         turnState.setNextState(parkState);
-        parkState.setNextState(null);
+        parkState.setNextState(moveState2);
+        moveState2.setNextState(stopState);
+        stopState.setNextState(releaseState);
+        releaseState.setNextState(parkState2);
+        parkState2.setNextState(null);
 
     }
 
