@@ -123,7 +123,7 @@ public class FULL_AUTO_BT extends OpMode
 
         //Turns the robot around 270 degrees clockwise (which is 90 degrees ccw) so that our
         //touch sensor is facing the foundation.
-        turnState = new GyroTurnCWByPID(260, .3, motors, imu);
+        turnState = new GyroTurnCWByPID(250, .3, motors, imu);
 
         //Drives until the touch sensor button is pressed by driving up against the foundation.
         //The purpose of this is to drive up and position ourself next to the tray so we can pull it.
