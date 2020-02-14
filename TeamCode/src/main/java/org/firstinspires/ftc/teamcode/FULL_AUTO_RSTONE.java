@@ -126,7 +126,7 @@ public class FULL_AUTO_RSTONE extends OpMode
         armState = new armMotorState(armMotor, -0.3);
         moveState = new MoveState(motors, 750, 0.5);
         //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
-        turnState = new GyroTurnCWByPID(70, .3, motors, imu);
+        turnState = new GyroTurnCWByPID(-70, .3, motors, imu);
         parkState = new ColorSenseStopState(motors, colorSensor, "red", 0.5, "backward");
         moveState2 = new MoveState(motors, 700, -0.5);
         releaseState = new armMotorState(armMotor, 0.3);

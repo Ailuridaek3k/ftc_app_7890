@@ -122,7 +122,7 @@ public class FULL_AUTO_BSTONE extends OpMode
         /*
         ---USING STATES---
          */
-        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.2, "backward");
+        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.3, "backward");
         stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "left");
         armState = new armMotorState(armMotor, -0.3);
         moveState = new MoveState(motors, 750, 0.3);
