@@ -98,16 +98,24 @@ public class FULL_TELEOP_1P extends OpMode {
         double rfDrive = Range.clip(drive - turn + strafe, -1.0, 1.0);
         double rbDrive = Range.clip(drive - turn - strafe, -1.0, 1.0);
 
+        
         /*
         ---WHEEL POWERS---
          */
         //We set the power to wheels based off the values calculated above. We can move
         //in all directions based off of the combinations inputted by the driver.
+        if(gamepad1.right_bumper){
+            leftFront.setPower(lfDrive/2);
+            leftBack.setPower(lbDrive/2);
+            rightFront.setPower(rfDrive/2);
+            rightBack.setPower(rbDrive/2);
+        }else{
+            leftFront.setPower(lfDrive);
+            leftBack.setPower(lbDrive);
+            rightFront.setPower(rfDrive);
+            rightBack.setPower(rbDrive);
+        }
 
-        leftFront.setPower(lfDrive);
-        leftBack.setPower(lbDrive);
-        rightFront.setPower(rfDrive);
-        rightBack.setPower(rbDrive);
 
         /*
         ---LIFT CONTROLLER SETUP---
@@ -117,8 +125,15 @@ public class FULL_TELEOP_1P extends OpMode {
 
         float liftControlUp = gamepad1.right_trigger;
         float liftControlDown = gamepad1.left_trigger;
-        liftMotor.setPower(-liftControlDown);
-        liftMotor.setPower(liftControlUp);
+        if(gamepad1.right_trigger>0.0) {
+            liftMotor.setPower(1.0);
+        }
+        if(gamepad1.left_trigger>0.0) {
+            liftMotor.setPower(-1.0); // hello erin
+        }
+        if(gamepad1.right_trigger<= 0.0 && gamepad1.left_trigger<=0.0) {
+            liftMotor.setPower(0.0);
+        }
 
         /*
         ---INTAKE WHEELS---
