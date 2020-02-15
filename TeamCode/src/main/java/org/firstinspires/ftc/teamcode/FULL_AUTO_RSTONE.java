@@ -43,14 +43,15 @@ public class FULL_AUTO_RSTONE extends OpMode
     BNO055IMU imu;
     ColorSensor colorSensor;
     ModernRoboticsI2cRangeSensor distanceSensor;
-    ColorSensor stoneSensor;
+    ColorSensor stoneSensorR;
+    ColorSensor stoneSensorL;
 
 
     /*
     ---STATES---
      */
     ColorSenseStopState initialMoveState;
-    ColorSenseMoveState stoneState;
+    doubleColorState stoneState;
     armMotorState armState;
     MoveState moveState;
     //distanceMoveState moveState;
@@ -101,7 +102,8 @@ public class FULL_AUTO_RSTONE extends OpMode
         distanceSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "distance sensor");
         ts = hardwareMap.get(DigitalChannel.class, "ts");
         colorSensor = hardwareMap.get(ColorSensor.class, "color sensor");
-        stoneSensor = hardwareMap.get(ColorSensor.class, "stone sensor");
+        stoneSensorL = hardwareMap.get(ColorSensor.class, "stone sensor L");
+        stoneSensorR = hardwareMap.get(ColorSensor.class, "stone sensor R");
 
         /*
         ---MOTOR DIRECTIONS---
@@ -121,8 +123,8 @@ public class FULL_AUTO_RSTONE extends OpMode
         /*
         ---USING STATES---
          */
-        initialMoveState = new ColorSenseStopState(motors, stoneSensor, "black and yellow", 0.3, "backward");
-        stoneState = new ColorSenseMoveState(motors, stoneSensor, "yellow", 0.5, "right");
+        initialMoveState = new ColorSenseStopState(motors, stoneSensorR, "black and yellow", 0.3, "backward");
+        stoneState = new doubleColorState(motors, stoneSensorR, stoneSensorL,"black", 0.3, "right");
         armState = new armMotorState(armMotor, -0.3);
         moveState = new MoveState(motors, 750, 0.5);
         //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
