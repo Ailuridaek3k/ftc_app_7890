@@ -100,8 +100,7 @@ public class FULL_TELEOP_1P extends OpMode {
         //in all directions based off of the combinations inputted by the driver.
         //We also added a "slow driving" function, allowing the driver to halve the speed
         //when the right bumper is pressed. This allows for more precise controls when the driver
-        //needs to pick up or place a block, but also allows the robot to quickly move across the
-        //field
+        //needs to pick up or place a block, but also allows the robot to quickly when needed
         if(gamepad1.right_bumper){
             leftFront.setPower(lfDrive/2);
             leftBack.setPower(lbDrive/2);
