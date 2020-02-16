@@ -13,7 +13,6 @@ import java.util.ArrayList;
 /*
 7890 Space Lions 2019 "FULL AUTO PARKBLU"
 author: 7890 Software (TEAM MEMBERS)
-GOALS: (GOALS)
 DESCRIPTION: This code is used for our autonomous when we are located on the side of the tray
  */
 @Autonomous(name="FULL AUTO BSTONE", group="Iterative Opmode")
