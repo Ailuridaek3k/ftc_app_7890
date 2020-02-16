@@ -30,31 +30,22 @@ public class FULL_AUTO_BSTONE extends OpMode
     DcMotor armMotor;
 
     /*
-    ---SERVOS---
-     */
-    //Servo armServo;
-
-
-    /*
     ---SENSORS---
      */
-    //ModernRoboticsI2cRangeSensor distanceSensor;
     DigitalChannel ts;
     BNO055IMU imu;
     ColorSensor colorSensor;
     ModernRoboticsI2cRangeSensor distanceSensor;
     ColorSensor stoneSensorL;
     ColorSensor stoneSensorR;
-
-
+    
     /*
     ---STATES---
      */
     ColorSenseStopState initialMoveState;
     doubleColorState stoneState;
     armMotorState armState;
-    MoveState moveState;
-    //distanceMoveState moveState;
+    distanceMoveState moveState;
     GyroTurnCCWByPID turnState;
     ColorSenseStopState parkState;
     MoveState moveState2;
@@ -125,16 +116,37 @@ public class FULL_AUTO_BSTONE extends OpMode
         /*
         ---USING STATES---
          */
+        //Moves the robot backwards until the color sensors on the back sense a stone
         initialMoveState = new ColorSenseStopState(motors, stoneSensorL, "black and yellow", 0.3, "backward");
+        
+        //The robot strafes to the left until both color sensors on the back stop sensing yellow. 
+        //This means we are at the Skystone.
         stoneState = new doubleColorState(motors, stoneSensorL, stoneSensorR, "black", 0.3, "left");
+        
+        //Deploys the arm motor and grabs the Skystone for delivery.
         armState = new armMotorState(armMotor, -0.3);
-        moveState = new MoveState(motors, 750, 0.3);
-        //moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
+        
+        //Moves the robot towards the wall, pulling the skystone, until we are 12 inches away from the wall.
+        //Detects the distance from the wall using a range sensor
+        moveState = new distanceMoveState(motors, distanceSensor, 12, 0.5);
+        
+        //Turns the robot around 90 degrees counterclockwise so that the back of the robot is facing the alliance bridge.
         turnState = new GyroTurnCCWByPID(70, 0.3, motors, imu);
+        
+        //Drives up towards the bridge until the color sensor on the bottom senses the blue tape.
         parkState = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "backward");
+        
+        //Moves backwards for 100 miliseconds to fully deliver the Skystone.
         moveState2 = new MoveState(motors, 100, -0.5);
+        
+        //Stops moving the wheels
         stopState = new MoveState(motors, 300, 0.0);
+        
+        //Releases the arm to complete the Skystone delivery
         releaseState = new armMotorState(armMotor, 0.3);
+        
+        //Drives up towards the bridge and stops once we are directly under it. Our color
+        //sensor detects the colored tape on the ground and turns off the power in the wheels.
         parkState2 = new ColorSenseStopState(motors, colorSensor, "blue", 0.5, "forward");
 
         /*
@@ -157,14 +169,15 @@ public class FULL_AUTO_BSTONE extends OpMode
     @Override
     public void start(){
         armMotor.setPower(0.0);
+        
+        //Start state machine
         machine = new StateMachine(initialMoveState);
     }
 
 
     private StateMachine machine;
     public void loop()  {
-
-
+        //Running state machine
         machine.update();
 
     }
