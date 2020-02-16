@@ -177,72 +177,6 @@ public class GyroTurnCWByPID implements State {
 
         // rotate until turn is completed.
 
-//        if (degrees < 0)
-//        {
-//            // On right turn we have to get off zero first.
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }
-//
-//            do
-//            {
-//                power = pidRotate.performPID(getAngle()); // power will be - on right turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }
-//            } while (!pidRotate.onTarget());
-//        }
-//        else
-
-//            while (getAngle() == 0)
-//            {
-//
-//                if(!clockwise) {
-//                    leftFront.setPower(power);
-//                    leftBack.setPower(power);
-//                    rightFront.setPower(-power);
-//                    rightBack.setPower(-power);
-//                }else {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }
-//
-//                wait(100);
-//            }// left turn.
-        do
-        {
-            power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-//                if(!clockwise) {
-//                    leftFront.setPower(-power);
-//                    leftBack.setPower(-power);
-//                    rightFront.setPower(power);
-//                    rightBack.setPower(power);
-//                }else {
-
             if(target < 0) {
                 leftFront.setPower(-power);
                 leftBack.setPower(-power);
@@ -262,10 +196,6 @@ public class GyroTurnCWByPID implements State {
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
-
-
-        // wait for rotation to stop.
-        //   wait(500);
 
         // reset angle tracking on new heading.
         resetAngle();
