@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.Range;
 /*
 7890 Space Lions 2019 "FULL TELEOP"
 author: 7890 Software (TEAM MEMBERS)
-GOALS: (GOALS)
  */
 @TeleOp(name="FULL TELEOP 1P", group="Tele Op")
 public class FULL_TELEOP_1P extends OpMode {
@@ -121,6 +120,7 @@ public class FULL_TELEOP_1P extends OpMode {
          */
         //The lift controls are on the trigger so that the driver can both move and
         //raise + lower the lift at the same time. This allows for a more efficient tele-op.
+        //The bumpers can be used to slow down the lift which allows for more precision.
 
         if(gamepad1.left_bumper) {
             if (gamepad1.right_trigger > 0.0) {
@@ -149,9 +149,8 @@ public class FULL_TELEOP_1P extends OpMode {
         ---INTAKE WHEELS---
          */
         //These intake wheels are what we use to suck the stones up into our intake
-        //mechanism. You press the button once to activate the wheels and then press
-        //the button again to switch the direction of the wheels. You press the bumper
-        //to stop the wheels.
+        //mechanism. You press the a button once to spin wheels one way and then press
+        //the button again to turn them off.
         if (gamepad1.x && spin == 0) // in
         {
             intakeMotor.setPower(1);
