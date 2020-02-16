@@ -33,12 +33,7 @@ public class FULL_AUTO_BT extends OpMode
     DcMotor leftBack;
     DcMotor rightBack;
     DcMotor armMotor;
-
-    /*
-    ---SERVOS---
-     */
-    //there are no sensors in this code
-
+    
     /*
     ---SENSORS---
      */
@@ -152,7 +147,6 @@ public class FULL_AUTO_BT extends OpMode
         /*
         ---ORDERING STATES---
          */
-
         rangeState.setNextState(turnState);
         turnState.setNextState(touchState);
         touchState.setNextState(lockState);
@@ -166,6 +160,7 @@ public class FULL_AUTO_BT extends OpMode
 
     @Override
     public void start(){
+        //Strafing away from the wall before the rest of the code executes
         armMotor.setPower(0.0);
         leftFront.setPower(-0.3);
         leftBack.setPower(0.3);
@@ -176,20 +171,20 @@ public class FULL_AUTO_BT extends OpMode
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
-
+        
+        //State machine starts
         machine = new StateMachine(rangeState);
     }
 
 
     private StateMachine machine;
     public void loop()  {
-        telemetry.addData("angle: ", turnState2.getAngle());
-        telemetry.update();
-
+        //Running our state machine and states
         machine.update();
 
     }
 
+    //Method we use to stop the code for an allotted amount of time (seconds)
     public void wait(int time) {
         try {
             Thread.sleep(time * 1000);//milliseconds
