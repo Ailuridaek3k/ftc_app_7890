@@ -37,11 +37,6 @@ public class FULL_TELEOP_1P extends OpMode {
     private DcMotor.Direction LEFTDIRECTION = DcMotor.Direction.REVERSE;
     private DcMotor.Direction RIGHTDIRECTION = DcMotor.Direction.FORWARD;
 
-    /*
-    ---SERVOS---
-     */
-    //no servos for now
-
     int spin = 0;
 
     @Override
@@ -104,6 +99,10 @@ public class FULL_TELEOP_1P extends OpMode {
          */
         //We set the power to wheels based off the values calculated above. We can move
         //in all directions based off of the combinations inputted by the driver.
+        //We also added a "slow driving" function, allowing the driver to halve the speed
+        //when the right bumper is pressed. This allows for more precise controls when the driver
+        //needs to pick up or place a block, but also allows the robot to quickly move across the
+        //field
         if(gamepad1.right_bumper){
             leftFront.setPower(lfDrive/2);
             leftBack.setPower(lbDrive/2);
@@ -123,16 +122,27 @@ public class FULL_TELEOP_1P extends OpMode {
         //The lift controls are on the trigger so that the driver can both move and
         //raise + lower the lift at the same time. This allows for a more efficient tele-op.
 
-        float liftControlUp = gamepad1.right_trigger;
-        float liftControlDown = gamepad1.left_trigger;
-        if(gamepad1.right_trigger>0.0) {
-            liftMotor.setPower(1.0);
+        if(gamepad1.left_bumper) {
+            if (gamepad1.right_trigger > 0.0) {
+                liftMotor.setPower(0.5);
+            }
+            if (gamepad1.left_trigger > 0.0) {
+                liftMotor.setPower(-0.5);
+            }
+            if (gamepad1.right_trigger <= 0.0 && gamepad1.left_trigger <= 0.0) {
+                liftMotor.setPower(0.0);
+            }
         }
-        if(gamepad1.left_trigger>0.0) {
-            liftMotor.setPower(-1.0); // hello erin
-        }
-        if(gamepad1.right_trigger<= 0.0 && gamepad1.left_trigger<=0.0) {
-            liftMotor.setPower(0.0);
+        else {
+            if (gamepad1.right_trigger > 0.0) {
+                liftMotor.setPower(1.0);
+            }
+            if (gamepad1.left_trigger > 0.0) {
+                liftMotor.setPower(-1.0); // hello erin
+            }
+            if (gamepad1.right_trigger <= 0.0 && gamepad1.left_trigger <= 0.0) {
+                liftMotor.setPower(0.0);
+            }
         }
 
         /*
@@ -140,44 +150,39 @@ public class FULL_TELEOP_1P extends OpMode {
          */
         //These intake wheels are what we use to suck the stones up into our intake
         //mechanism. You press the button once to activate the wheels and then press
-        //the button again to switch the direction of the wheels.
-
-        if(gamepad1.x && spin == 0){
-            //first time around
-            spin = 1; //whenever you turn it on it will do 1
-        }else if(gamepad1.x && (spin != 1)){
-            spin = 1;
-        }else if(gamepad1.x && (spin != -1)){
-            spin = -1;
-        }else if(gamepad1.y){
+        //the button again to switch the direction of the wheels. You press the bumper
+        //to stop the wheels.
+        if (gamepad1.x && spin == 0) // in
+        {
+            intakeMotor.setPower(1);
+            spin ^= 1;
+            telemetry.addData("INTAKE", "0");
+            telemetry.update();
+        } else if (gamepad1.x && spin == 1)// stops intaking
+        {
+            intakeMotor.setPower(0);
+            spin ^= 1;
+            telemetry.addData("INTAKE", "1");
+            telemetry.update();
+        } else if (gamepad1.y) // outtakes
+        { 
+            intakeMotor.setPower(-1);
             spin = 0;
-        }
-        intakeMotor.setPower(spin);
-
-        if (spin == 1){
-            telemetry.addLine("OUT");
-            telemetry.update();
-        }else if(spin == -1){
-            telemetry.addLine("IN");
-            telemetry.update();
-        }else{
-
         }
 
 
         /*
         ---CONTROLLING THE ARM---
          */
-        //This code gives us manual control the arm that we use to attach ourselves
-        //to the foundation. This means that we are able to reposition the tray during
-        //tele-op if needed.
+        //This code gives us manual control the arm that we use to pull
+        //the foundation. This means that we are able to reposition the tray during
+        //tele-op if needed and during endgame.
+        double power;
+        power = gamepad1.dpad_up ? 0.3 : 0;
+            armMotor.setPower(power);
 
-        if(gamepad1.dpad_up) {
-            armMotor.setPower(0.3);
-        }
-        if(gamepad1.dpad_down) {
-            armMotor.setPower(-0.5);
-        }
+        power = gamepad1.dpad_up ? -0.5 : 0;
+            armMotor.setPower(power);
 
         /*
         ---TELEMETRY & TESTING---
